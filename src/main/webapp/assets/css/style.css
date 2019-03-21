@@ -1,0 +1,21 @@
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+}
+[ng-cloak] {
+    display: none !important;
+}
+.carousel-item img {
+    max-height: 600px;
+    object-fit: cover;
+}
+
+@media (max-width: 991px) {
+    .user-btn {
+        display: block;
+        width: 100%;
+    }
+    .user-btn + .dropdown-menu { 
+        left: 0;
+    }
+}

@@ -1,21 +1,11 @@
 package ast20201.project.payload;
 
 public class SignUpResponse {
-	private String username;
 	private String accessToken;
 	private String tokenType = "Bearer";
 	
-	public SignUpResponse(String username, String accessToken) {
-        this.setUsername(username);
+	public SignUpResponse(String accessToken) {
         this.setAccessToken(accessToken);
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
 	}
 
 	public String getAccessToken() {

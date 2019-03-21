@@ -63,15 +63,19 @@ public class UserController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
         
-        return new ResponseEntity<Object>(new SignUpResponse(user.getUsername(), jwt), HttpStatus.CREATED);
+        String jwt = "";
+        try {
+        	jwt = tokenProvider.generateToken(((User)authentication.getPrincipal()).getId(), ((User)authentication.getPrincipal()).getUsername());
+        } catch (Exception e) {
+        	
+        }
+        
+        return new ResponseEntity<Object>(new SignUpResponse(jwt), HttpStatus.CREATED);
     }
 	
 	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
     public ResponseEntity<?> signIn(@RequestBody User user) {
-		System.out.println(user.getUsernameOrEmail());
-		System.out.println(user.getPassword());
 		Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getUsernameOrEmail(),
@@ -79,8 +83,14 @@ public class UserController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = tokenProvider.generateToken(authentication);
+        
+        String jwt = "";
+        try {
+        	jwt = tokenProvider.generateToken(((User)authentication.getPrincipal()).getId(), ((User)authentication.getPrincipal()).getUsername());
+        } catch (Exception e) {
+        	
+        }
+        
         return ResponseEntity.ok(new SignInResponse(jwt));
     }
 }

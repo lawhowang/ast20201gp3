@@ -1,18 +1,23 @@
 package ast20201.project.util;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import ast20201.project.domain.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import java.security.Key;
-import java.util.Date;
+import ast20201.project.domain.User;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtTokenProvider {
@@ -21,16 +26,19 @@ public class JwtTokenProvider {
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static int jwtExpirationInMs = 604800000;
 
-    public String generateToken(Authentication authentication) {
-
-    	long userId = (long) authentication.getPrincipal();
-    			
+    public String generateToken(Long userId, String username) throws JsonProcessingException {
+    	ObjectMapper mapper = new ObjectMapper();
+    	ObjectNode userInfo = mapper.createObjectNode();
+    	userInfo.put("id", userId);
+    	userInfo.put("username", username);
+        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(userInfo);
+    	System.out.println(json);
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
         
         
         return Jwts.builder()
-                .setSubject(Long.toString(userId))
+                .setSubject(json)
                 .setIssuedAt(new Date())
                 .setExpiration(expiryDate)
                 .signWith(key)
