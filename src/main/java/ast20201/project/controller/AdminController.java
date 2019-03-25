@@ -38,6 +38,8 @@ public class AdminController {
 		int maxPages = (int) Math.ceil((double) totalUserCount / maxItemsPerPage);
 		System.out.println("m " + maxPages);
 		List<User> users = adminService.getUsersByPage(page, maxItemsPerPage);
+		
+		model.put("path", "/users/user_list/");
 		model.put("searchMode", false);
 		model.put("currPage", page);
 		model.put("maxPages", maxPages);
@@ -63,6 +65,7 @@ public class AdminController {
 		System.out.println("start " + start + " end" + end);
 		List<User> users = usersAll.subList(start, end);
 		
+		model.put("path", "/users/user_list/search/" + username + "/");
 		model.put("searchMode", true);
 		model.put("searchWord", username);
 		model.put("currPage", page);

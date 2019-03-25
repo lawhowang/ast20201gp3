@@ -1,5 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <div class="row">
     <div class="col-12 col-md-5 col-lg-3 col-xl-3">
         <div class="input-group mb-3 mt-3">
@@ -42,6 +41,7 @@
 </table>
 
 <div>
+        ${context}
     <ul class="pagination justify-content-center">
         <%
         int currPage = (int)request.getAttribute("currPage");
@@ -60,24 +60,26 @@
         if (upperBound - currPage < 5) {
             lowerBound = lowerBound - 5 < 1 ? 1 : lowerBound - 5;
         }
+
+        
         %>
 
         <li class="page-item <%= (lowerBound < currPage) ? "" : "disabled" %>">
-            <a class="page-link" href="#!users/user_list/<%= currPage - 1 %>" aria-label="Previous">
+            <a class="page-link" href="#!${path}<%= currPage - 1 %>" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
 
         <% for (int i = lowerBound; i < currPage; i++) { %>
-        <li class="page-item"><a class="page-link" href="#!users/user_list/<%= i %>"><%= i %></a></li>
+        <li class="page-item"><a class="page-link" href="#!${path}<%= i %>"><%= i %></a></li>
         <% } %>
         <li class="page-item active"><a class="page-link" href=""><%= currPage %></a></li>
         <% for (int i = currPage + 1; i <= upperBound; i++) { %>
-        <li class="page-item"><a class="page-link" href="#!users/user_list/<%= i %>"><%= i %></a></li>
+        <li class="page-item"><a class="page-link" href="#!${path}<%= i %>"><%= i %></a></li>
         <% } %>
 
         <li class="page-item <%= (upperBound > currPage) ? "" : "disabled" %>">
-            <a class="page-link" href="#!users/user_list/<%= currPage + 1 %>" aria-label="Next">
+            <a class="page-link" href="#!${path}<%= currPage + 1 %>" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
