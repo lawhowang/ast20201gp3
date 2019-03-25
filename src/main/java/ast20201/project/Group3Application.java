@@ -11,13 +11,13 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 @SpringBootApplication
 public class Group3Application extends SpringBootServletInitializer {
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(Group3Application.class, args);
 	}
-	
+
 	@Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(Group3Application.class);
-    }
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(Group3Application.class);
+	}
 }

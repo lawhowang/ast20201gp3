@@ -1,1 +1,4 @@
-var app = angular.module('app', ['angular-jwt']);
+var app = angular.module('app', ["ngRoute"]);
+app.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.headers.common['Content-Type'] = 'application/json';
+}]);

@@ -1,96 +1,93 @@
+/* 
+ * References
+ * https://stackoverflow.com/questions/25075683/spring-mvc-validator-annotation-custom-validation
+ * https://stackoverflow.com/questions/14533488/adding-multiple-validators-using-initbinder
+ */
 package ast20201.project.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
-import ast20201.project.domain.User;
-import ast20201.project.payload.ErrorResponse;
-import ast20201.project.payload.SignInResponse;
-import ast20201.project.payload.SignUpResponse;
+import ast20201.project.model.SignInRequest;
+import ast20201.project.model.SignUpRequest;
+import ast20201.project.model.User;
 import ast20201.project.service.UserService;
-import ast20201.project.util.JwtTokenProvider;
+import ast20201.project.validator.SignUpRequestValidator;
 
-@RestController
-@RequestMapping("/api")
+@RequestMapping(value = "/api")
+@Controller
 public class UserController {
-	
+
 	@Autowired
-    AuthenticationManager authenticationManager;
-	
-	@Autowired
-    JwtTokenProvider tokenProvider;
+	AuthenticationManager authenticationManager;
 
 	@Autowired
 	UserService userService;
-	
+
+	@Autowired
+	SignUpRequestValidator signUpRequestValidator;
+
+	@Autowired
+	SignUpRequestValidator signInRequestValidator;
+
+	@InitBinder("signUpRequest")
+	protected void initSignUpRequestBinder(WebDataBinder binder) {
+		binder.addValidators(signUpRequestValidator);
+	}
+
 	@RequestMapping(value = "/user/", method = RequestMethod.POST)
-    public ResponseEntity<?> signUp(@Valid @RequestBody User user) {
-		// Check if duplicated in the database
-		List<String> errors = new ArrayList<String>();
-		if (userService.checkUsernameDuplicated(user.getUsername())) {
-			errors.add("Username already exists");
-		}
-		if (userService.checkEmailDuplicated(user.getEmail())) {
-			errors.add("Email already exists");
-		}
-		if (errors.size() > 0) {
-			return new ResponseEntity<Object>(new ErrorResponse(errors.toArray(new String[errors.size()])), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+		User user = new User();
+		user.setUsername(signUpRequest.getUsername());
+		user.setPassword(signUpRequest.getPassword());
+		user.setEmail(signUpRequest.getEmail());
+
 		// Registration
 		userService.addUser(user);
-		
+
 		// Authentication
-		Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getUsernameOrEmail(),
-                        user.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        
-        String jwt = "";
-        try {
-        	jwt = tokenProvider.generateToken(((User)authentication.getPrincipal()).getId(), ((User)authentication.getPrincipal()).getUsername());
-        } catch (Exception e) {
-        	
-        }
-        
-        return new ResponseEntity<Object>(new SignUpResponse(jwt), HttpStatus.CREATED);
-    }
-	
-	@RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public ResponseEntity<?> signIn(@RequestBody User user) {
-		Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getUsernameOrEmail(),
-                        user.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        
-        String jwt = "";
-        try {
-        	jwt = tokenProvider.generateToken(((User)authentication.getPrincipal()).getId(), ((User)authentication.getPrincipal()).getUsername());
-        } catch (Exception e) {
-        	
-        }
-        
-        return ResponseEntity.ok(new SignInResponse(jwt));
-    }
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(user.getUsernameOrEmail(), user.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		User dbuser = (User) authentication.getPrincipal();
+		userService.updateLastLogin(dbuser.getId());
+		return ResponseEntity.ok(dbuser);
+	}
+
+	@RequestMapping(value = "/user/signin", method = RequestMethod.POST)
+	public ResponseEntity<Object> signIn(@Valid @RequestBody SignInRequest signInRequest) {
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+				signInRequest.getUsernameOrEmail(), signInRequest.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		User dbuser = (User) authentication.getPrincipal();
+		userService.updateLastLogin(dbuser.getId());
+		return ResponseEntity.ok(dbuser);
+	}
+
+	@RequestMapping(value = "/user/signout", method = RequestMethod.POST)
+	public ResponseEntity<Object> signOut() {
+		SecurityContextHolder.getContext().setAuthentication(null);
+		return ResponseEntity.ok("{}");
+	}
+
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@RequestMapping(value = "/hello", method = RequestMethod.POST)
+	public ResponseEntity<?> hello() {
+		System.out.println("isAdmin");
+		String json = "{ }";
+		return ResponseEntity.ok(json);
+	}
 }
