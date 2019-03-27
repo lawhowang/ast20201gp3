@@ -71,4 +71,8 @@ public class UserRepository {
 				Integer.class);
 		return count;
 	}
+
+	public User getUser(long id) {
+		return getUserById(id);
+	}
 }

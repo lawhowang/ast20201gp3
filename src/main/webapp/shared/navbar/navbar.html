@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Option 2</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Option 3
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Option 1</a>
+                    <a class="dropdown-item" href="#">Option 2</a>
+                    <a class="dropdown-item" href="#">Option 3</a>
+                </div>
+            </li>
+        </ul>
+        <div class="navbar-user">
+            <div class="btn-group" ng-hide="navbarCtrl.authService.authenticated">
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#signInModel">Sign
+                    In</button>
+                <button type="button" class="btn btn-light" data-toggle="modal" data-target="#signUpModel">Create
+                    Account</button>
+                <auth></auth>
+                <signup></signup>
+            </div>
+            <div class="dropdown" ng-show="navbarCtrl.authService.authenticated">
+                <button class="btn btn-light dropdown-toggle user-btn" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-user-circle avatar px-1 align-baseline"></i>
+                    {{navbarCtrl.authService.user.username}}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" ng-click="test()">History</a>
+                    <a class="dropdown-item" href="#">Credits</a>
+
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" ng-click="navbarCtrl.authService.signOut()">Sign Out</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

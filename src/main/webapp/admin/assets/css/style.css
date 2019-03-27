@@ -1,3 +1,28 @@
+.fade-in-view.ng-enter, .fade-in-view.ng-leave {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+.fade-in-view.ng-leave {
+	position: absolute;
+}
+
+.fade-in-view.ng-enter,
+.fade-in-view.ng-leave.ng-leave-active {
+	opacity: 0;
+
+}
+.fade-in-view.ng-leave,
+.fade-in-view.ng-enter.ng-enter-active {
+	opacity: 1;
+}
+
+
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
 .nav-menu {
 	overflow: auto;
 	position: fixed;
@@ -58,15 +83,7 @@
 	display: block;
 	padding-left: 15px;
 }
-.nav-menu ul .sub-menu li.active,
-.nav-menu li .sub-menu li.active {
-	color: #d19b3d;
-}
 
-.nav-menu ul .sub-menu li.active a,
-.nav-menu li .sub-menu li.active a {
-	color: #d19b3d;
-}
 
 .nav-menu ul .sub-menu li,
 .nav-menu li .sub-menu li {
@@ -102,10 +119,11 @@
 .nav-menu li a {
 	text-decoration: none;
 	color: #9eabbf;
+	display: block;
 }
 
 .nav-menu li.active a {
-  color: #ffffff;
+  color: #d7eaff;
 }
 
 .nav-menu li a i {
@@ -154,7 +172,7 @@
 	.nav-menu .menu-list .menu-content {
 		display: block;
   }
-  .nav-menu li {
+  .nav-menu li a {
     padding-top: 6px;
     padding-bottom: 6px;
   }

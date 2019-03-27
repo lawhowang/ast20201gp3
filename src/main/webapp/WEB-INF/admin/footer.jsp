@@ -16,6 +16,7 @@
 <script src="/app.js"></script>
 <script src="/services/userServices.js"></script>
 <script src="/controllers/userController.js"></script>
+<script src="admin.route.js"></script>
 <script src="/controllers/adminController.js"></script>
 </body>
 

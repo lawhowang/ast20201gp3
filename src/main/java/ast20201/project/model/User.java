@@ -34,7 +34,6 @@ public class User {
 	private String role;
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Timestamp create_date;
-	@JsonProperty(access = Access.WRITE_ONLY)
 	private Timestamp last_login_date;
 
 	public long getId() {

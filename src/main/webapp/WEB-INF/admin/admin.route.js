@@ -1,15 +1,4 @@
 angular
-    .module('app')
-    .controller('userListCtrl', ['$scope', '$location', function ($scope, $location) {
-        $scope.searchByUsername = function (search) {
-            var username = search ? search.username : "";
-            $location.path("/users/user_list/search/" + username + "/1");
-        }
-        $scope.cancelSearch = function () {
-            $location.path("/users/user_list");
-        }
-    }]);
-angular
     .module('app').config(function ($routeProvider) {
         $routeProvider
             .when("/users/user_list/:page?", {

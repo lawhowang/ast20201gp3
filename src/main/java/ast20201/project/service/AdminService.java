@@ -24,4 +24,8 @@ public class AdminService {
 	public List<User> searchUsersByUsername(String username) {
 		return userRepository.searchUsersByUsername(username);
 	}
+	
+	public User getUser(long id) {
+		return userRepository.getUser(id);
+	}
 }

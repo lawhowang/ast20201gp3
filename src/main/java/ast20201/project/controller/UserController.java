@@ -47,8 +47,20 @@ public class UserController {
 	protected void initSignUpRequestBinder(WebDataBinder binder) {
 		binder.addValidators(signUpRequestValidator);
 	}
+	
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	public ResponseEntity<?> getUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		User user = new User();
+		try {
+			user = (User) authentication.getPrincipal();
+		} catch (Exception ex) {
 
-	@RequestMapping(value = "/user/", method = RequestMethod.POST)
+		}
+		return ResponseEntity.ok(user);
+	}
+
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public ResponseEntity<?> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
 		User user = new User();
 		user.setUsername(signUpRequest.getUsername());
