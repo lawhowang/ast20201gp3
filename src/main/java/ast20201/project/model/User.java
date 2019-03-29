@@ -4,36 +4,58 @@
 
 package ast20201.project.model;
 
+import ast20201.project.validation.ValidationGroup;
+
 import java.sql.Timestamp;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.stereotype.Component;
-import org.springframework.util.DigestUtils;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Component
 public class User {
+	@NotNull(groups = { ValidationGroup.EditUser.class }, message = "ID is a required field")
 	private long id;
-	@NotNull(message = "Username is a required field")
-	@Size(min = 6, max = 12, message = "Username length must be betweeb 6 and 12 characters")
+
+	@NotBlank(groups = { ValidationGroup.SignupUser.class,
+			ValidationGroup.EditUser.class }, message = "Username is a required field")
+	@Size(groups = { ValidationGroup.SignupUser.class,
+			ValidationGroup.EditUser.class }, min = 6, max = 12, message = "Username length must be between 6 and 12 characters")
+	@Pattern(groups = { ValidationGroup.SignupUser.class,
+			ValidationGroup.EditUser.class }, regexp = "^[a-zA-Z0-9_]*$", message = "Username can only contain letters and numbers")
 	private String username;
-	@NotNull(message = "Password is a required field")
-	@Size(min = 6, max = 12, message = "Password length must be betweeb 6 and 12 characters")
+
+	@NotBlank(groups = { ValidationGroup.SigninUser.class,
+			ValidationGroup.SignupUser.class }, message = "Password is a required field")
+	@Size(groups = { ValidationGroup.SigninUser.class,
+			ValidationGroup.SignupUser.class }, min = 6, max = 12, message = "Password length must be between 6 and 12 characters")
+	@Pattern(groups = {
+			ValidationGroup.EditUser.class }, regexp = "^$|^.{6,12}$", message = "Either leave password field empty or set a valid password with length 6 ~ 12")
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
-	@NotNull(message = "Email is a required field")
-	@Email(message = "Please provide a valid email address")
+
+	@NotBlank(groups = { ValidationGroup.SignupUser.class,
+			ValidationGroup.EditUser.class }, message = "Email is a required field")
+	@Email(groups = { ValidationGroup.SignupUser.class,
+			ValidationGroup.EditUser.class }, message = "Please provide a valid email address")
 	private String email;
+
 	private String phone;
 	private String address;
+
+	@NotBlank(groups = { ValidationGroup.EditUser.class }, message = "Role is a required field")
 	private String role;
+
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private Timestamp create_date;
+
 	private Timestamp last_login_date;
 
 	public long getId() {
@@ -52,7 +74,15 @@ public class User {
 		this.username = username;
 	}
 
+	public void setUsernameOrEmail(String usernameOrEmail) {
+		if (usernameOrEmail.contains("@"))
+			this.email = usernameOrEmail;
+		else
+			this.username = usernameOrEmail;
+	}
+	
 	@JsonProperty(access = Access.WRITE_ONLY)
+	@NotNull(groups = { ValidationGroup.SigninUser.class }, message = "Username/Email is a required field")
 	public String getUsernameOrEmail() {
 		if (this.username == null)
 			return email;
@@ -61,11 +91,6 @@ public class User {
 
 	public String getPassword() {
 		return password;
-	}
-
-	@JsonProperty(access = Access.WRITE_ONLY)
-	public String getHashedPassword() {
-		return DigestUtils.md5DigestAsHex(password.getBytes());
 	}
 
 	public void setPassword(String password) {
@@ -84,8 +109,8 @@ public class User {
 		return phone;
 	}
 
-	public void setCellphone(String cellphone) {
-		this.phone = cellphone;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getAddress() {
@@ -103,7 +128,7 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+
 	public Timestamp getCreate_date() {
 		return create_date;
 	}
@@ -111,7 +136,6 @@ public class User {
 	public void setCreate_date(Timestamp create_date) {
 		this.create_date = create_date;
 	}
-
 
 	public Timestamp getLast_login_date() {
 		return last_login_date;

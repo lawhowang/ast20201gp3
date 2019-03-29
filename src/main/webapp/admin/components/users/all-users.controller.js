@@ -5,9 +5,9 @@
         .module('app')
         .controller('AllUsersCtrl', AllUsersCtrl);
 
-    AllUsersCtrl.$inject = ['userService', '$routeParams'];
+    AllUsersCtrl.$inject = ['userService', '$routeParams', '$location'];
 
-    function AllUsersCtrl(userService, $routeParams) {
+    function AllUsersCtrl(userService, $routeParams, $location) {
         var vm = this;
         vm.q = $routeParams.q;
         vm.page = $routeParams.page;
@@ -26,7 +26,11 @@
                     console.log(response);
                     vm.loaded = true;
                 });
-        }
+        };
+
+        vm.submitSearch = function () {
+            $location.path('/users/all-users/search/' + vm.q);
+        };
 
         vm.searchUsers = function (q, page) {
             vm.loaded = false;
@@ -42,7 +46,7 @@
                     console.log(response);
                     vm.loaded = true;
                 });
-        }
+        };
         
         if (!vm.q) {
             if (vm.page)

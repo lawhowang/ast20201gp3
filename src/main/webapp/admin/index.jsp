@@ -33,6 +33,8 @@
     <script src="components/users/all-users.directive.js"></script>
     <script src="components/users/edit-user.controller.js"></script>
     <script src="components/users/edit-user.directive.js"></script>
+    <script src="components/users/add-user.controller.js"></script>
+    <script src="components/users/add-user.directive.js"></script>
     <script src="components/users/users.service.js"></script>
     <script src="components/pagination/pagination.controller.js"></script>
     <script src="components/pagination/pagination.directive.js"></script>

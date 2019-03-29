@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import ast20201.project.payload.FieldErrorResponse;
+import ast20201.project.model.FieldErrorResponse;
 
 @ControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
@@ -32,9 +32,8 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 		FieldErrorResponse er = new FieldErrorResponse();
 		final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
 		for (FieldError fe : fieldErrors) {
-			er.addError(fe.getField(), fe.getDefaultMessage());
+			er.addErrors(fe.getField(), fe.getDefaultMessage());
 		}
-
-		return new ResponseEntity<Object>(er.size() == 0 ? ex : er, headers, status);
+		return new ResponseEntity<Object>(er.hasErrors() ? er : ex, headers, status);
 	}
 }

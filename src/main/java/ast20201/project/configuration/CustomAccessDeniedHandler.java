@@ -1,4 +1,5 @@
 /*
+ * Authenticated but not enough permission (Users trying to access admin privileges)
  * Reference
  * https://www.kancloud.cn/digest/springsecurity/169115
  */

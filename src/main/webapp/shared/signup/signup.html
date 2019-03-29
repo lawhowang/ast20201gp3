@@ -19,34 +19,35 @@
                     <div class="form-group">
                         <label for="signUp-username">Username</label>
                         <input type="text" class="form-control"
-                            ng-class="(signupCtrl.error.username) ? 'is-invalid' : ''" id="signUp-username"
+                            ng-class="(signupCtrl.errors.username) ? 'is-invalid' : ''" id="signUp-username"
                             ng-model="signupCtrl.username" placeholder="Enter username" required>
-                        <span class="text-danger" ng-show="signupCtrl.error.username"
-                            ng-repeat="error in signupCtrl.error.username">{{error}}</span>
+                        <div class="invalid-feedback" ng-show="signupCtrl.errors.username"
+                            ng-repeat="error in signupCtrl.errors.username">{{error}}</div>
                     </div>
                     <div class="form-group">
                         <label for="signUp-password">Password</label>
                         <input type="password" class="form-control"
-                            ng-class="(signupCtrl.error.password) ? 'is-invalid' : ''" id="signUp-password"
+                            ng-class="(signupCtrl.errors.password) ? 'is-invalid' : ''" id="signUp-password"
                             ng-model="signupCtrl.password" placeholder="Enter password" required>
-                        <span class="text-danger" ng-show="signupCtrl.error.password"
-                            ng-repeat="error in signupCtrl.error.password">{{error}}</span>
+                        <div class="invalid-feedback" ng-show="signupCtrl.errors.password"
+                            ng-repeat="error in signupCtrl.errors.password">{{error}}</div>
                     </div>
                     <div class="form-group">
                         <label for="signUp-confirmPassword">Repeat Password</label>
                         <input type="password" class="form-control"
-                            ng-class="(signupCtrl.error.confirmPassword) ? 'is-invalid' : ''"
+                            ng-class="(signupCtrl.errors.confirmPassword) ? 'is-invalid' : ''"
                             id="signUp-confirmPassword" ng-model="signupCtrl.confirmPassword"
                             placeholder="Enter password again" required>
-                        <span class="text-danger" ng-show="signupCtrl.error.confirmPassword"
-                            ng-repeat="error in signupCtrl.error.confirmPassword">{{error}}</span>
+                        <div class="invalid-feedback" ng-show="signupCtrl.errors.confirmPassword"
+                            ng-repeat="error in signupCtrl.errors.confirmPassword">{{error}}</div>
                     </div>
                     <div class="form-group">
                         <label for="signUp-email">Email Address</label>
-                        <input type="email" class="form-control" ng-class="(signupCtrl.error.email) ? 'is-invalid' : ''"
-                            id="signUp-email" ng-model="signupCtrl.email" placeholder="Enter email" required>
-                        <span class="text-danger" ng-show="signupCtrl.error.email"
-                            ng-repeat="error in signupCtrl.error.email">{{error}}</span>
+                        <input type="email" class="form-control"
+                            ng-class="(signupCtrl.errors.email) ? 'is-invalid' : ''" id="signUp-email"
+                            ng-model="signupCtrl.email" placeholder="Enter email" required>
+                        <div class="invalid-feedback" ng-show="signupCtrl.errors.email"
+                            ng-repeat="error in signupCtrl.errors.email">{{error}}</div>
                     </div>
                 </div>
                 <div class="modal-footer">

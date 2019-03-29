@@ -24,12 +24,20 @@
                     <div class="form-group">
                         <label for="signIn-username-or-email">Username/Email</label>
                         <input type="text" class="form-control" id="signIn-username-or-email" name="username"
-                            ng-model="authCtrl.usernameOrEmail" placeholder="Enter username or email" required>
+                            ng-model="authCtrl.usernameOrEmail" placeholder="Enter username or email" required ng-class="{ 'is-invalid' : authCtrl.errors.usernameOrEmail }">
+                        <div class="invalid-feedback" ng-show="authCtrl.errors.usernameOrEmail"
+                            ng-repeat="error in authCtrl.errors.usernameOrEmail">
+                            {{error}}
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="signIn-password">Password</label>
                         <input type="password" class="form-control" id="signIn-password" name="password"
-                            ng-model="authCtrl.password" placeholder="Enter password" required>
+                            ng-model="authCtrl.password" placeholder="Enter password" required ng-class="{ 'is-invalid' : authCtrl.errors.password }">
+                        <div class="invalid-feedback" ng-show="authCtrl.errors.password"
+                            ng-repeat="error in authCtrl.errors.password">
+                            {{error}}
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

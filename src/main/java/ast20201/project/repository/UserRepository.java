@@ -7,7 +7,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import ast20201.project.model.User;
 
@@ -16,11 +15,9 @@ public class UserRepository {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public void addUser(User user) {
-		jdbcTemplate.update(
-				"INSERT INTO User (username, password, email, phone, address, role, create_date)"
-						+ "VALUES (?, ?, ?, ?, ?, 'user', NOW())",
-				user.getUsername(), user.getHashedPassword(), user.getEmail(), user.getPhone(), user.getAddress());
+	public void addUser(String username, String hashedPassword, String email, String phone, String address) {
+		jdbcTemplate.update("INSERT INTO User (username, password, email, phone, address, role, create_date)"
+				+ "VALUES (?, ?, ?, ?, ?, 'user', NOW())", username, hashedPassword, email, phone, address);
 	}
 
 	public boolean checkUsernameDuplicated(String username) {
@@ -58,21 +55,23 @@ public class UserRepository {
 				new BeanPropertyRowMapper<User>(User.class));
 		return users;
 	}
-	
+
 	public List<User> searchUsersByUsername(String username) {
-		List<User> users = jdbcTemplate.query("SELECT * FROM user WHERE username LIKE ?", new Object[] { "%" + username + "%" },
-				new BeanPropertyRowMapper<User>(User.class));
+		List<User> users = jdbcTemplate.query("SELECT * FROM user WHERE username LIKE ?",
+				new Object[] { "%" + username + "%" }, new BeanPropertyRowMapper<User>(User.class));
 		return users;
 	}
 
 	public int getTotalUserCount() {
-		int count = jdbcTemplate.queryForObject(
-				"SELECT COUNT(*) FROM user",
-				Integer.class);
+		int count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM user", Integer.class);
 		return count;
 	}
 
 	public User getUser(long id) {
 		return getUserById(id);
+	}
+
+	public void updateUser(long id, String username, String hashedPassword, String email, String phone, String address, String role) {
+		jdbcTemplate.update("UPDATE User SET username = ?, password = ?, email = ?, phone = ?, address = ?, role = ? WHERE id = ?", new Object[] { username, hashedPassword, email, phone, address, role, id });
 	}
 }

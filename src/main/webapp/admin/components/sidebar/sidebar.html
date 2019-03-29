@@ -14,7 +14,7 @@
             </li>
             <ul class="sub-menu " id="user" ng-class="sidebarCtrl.isActive('/users') ? 'show' : 'collapse'">
                 <li ng-class="{ active: sidebarCtrl.isActive('/users/all-users') }"><a href="#!users/all-users">All Users</a></li>
-                <li><a>Add User</a></li>
+                <li ng-class="{ active: sidebarCtrl.isActive('/users/add-user') }"><a href="#!users/add-user">Add User</a></li>
             </ul>
 
 

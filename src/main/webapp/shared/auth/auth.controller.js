@@ -24,6 +24,7 @@
                     vm.loading = false;
                     console.log(response);
                     vm.error = response.data.error;
+                    vm.errors = response.data.errors;
                 });
         }
 

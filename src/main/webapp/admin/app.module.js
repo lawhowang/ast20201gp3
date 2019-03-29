@@ -21,6 +21,9 @@
             .when("/users/edit-user/:id", {
                 template: '<edit-user></edit-user>'
             })
+            .when("/users/add-user", {
+                template: '<add-user></add-user>'
+            })
             .otherwise({ redirectTo: '/' });
     }
 })();

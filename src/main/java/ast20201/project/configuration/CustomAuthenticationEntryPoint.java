@@ -1,4 +1,5 @@
 /*
+ * This is the handler for unauthenticated access
  * References
  * https://stackoverflow.com/questions/19767267/handle-spring-security-authentication-exceptions-with-exceptionhandler
  */

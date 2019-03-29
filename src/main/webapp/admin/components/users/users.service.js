@@ -11,7 +11,8 @@
         var service = {
             getAllUsers: getAllUsers,
             searchUsers: searchUsers,
-            getUser: getUser
+            getUser: getUser,
+            updateUser: updateUser
         };
 
         return service;
@@ -29,6 +30,10 @@
         function getUser(id) {
             var data = { id: id };
             return $http.get("/admin/api/users/", { params: data });
+        }
+
+        function updateUser(data) {
+            return $http.put("/admin/api/users/", data);
         }
     }
 })();

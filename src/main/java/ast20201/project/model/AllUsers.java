@@ -1,15 +1,15 @@
-package ast20201.project.payload;
+package ast20201.project.model;
 
 import java.util.List;
 
 import ast20201.project.model.User;
 
-public class AllUsersResponse {
+public class AllUsers {
 	private int currPage;
 	private int maxPages;
 	private List<User> users;
 	
-	public AllUsersResponse(int page, int maxPages, List<User> users) {
+	public AllUsers(int page, int maxPages, List<User> users) {
 		this.currPage = page;
 		this.maxPages = maxPages;
 		this.users = users;
