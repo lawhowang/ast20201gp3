@@ -5,9 +5,9 @@
         .module('app')
         .controller('EditUserCtrl', EditUserCtrl);
 
-    EditUserCtrl.$inject = ['userService', '$routeParams'];
+    EditUserCtrl.$inject = ['userService', '$routeParams', '$window'];
 
-    function EditUserCtrl(userService, $routeParams) {
+    function EditUserCtrl(userService, $routeParams, $window) {
         var vm = this;
         vm.id = $routeParams.id;
 
@@ -21,7 +21,6 @@
 
         vm.submit = function () {
             if (vm.data) {
-                console.log(vm.data);
                 userService.updateUser(vm.data)
                     .then(function sucessCallback(response) {
                         console.log(response);
@@ -34,6 +33,16 @@
                         delete vm.success;
                     });
             }
-        }
+        };
+
+        vm.deleteUser = function () {
+            userService.deleteUser(vm.data.id)
+                .then(function sucessCallback(response) {
+                    console.log(response);
+                    $window.history.back();
+                }, function errorCallBack(response) {
+                    console.log(response);
+                });
+        };
     }
 })();

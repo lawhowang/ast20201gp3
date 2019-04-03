@@ -15,7 +15,7 @@ public class UserService {
 
 	public void addUser(User user) {
 		userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(),
-				user.getAddress());
+				user.getAddress(), user.getRole());
 	}
 
 	public User getUserById(Long userId) {
@@ -57,5 +57,9 @@ public class UserService {
 	public void updateUser(User dbuser) {
 		userRepository.updateUser(dbuser.getId(), dbuser.getUsername(), dbuser.getPassword(), dbuser.getEmail(),
 				dbuser.getPhone(), dbuser.getAddress(), dbuser.getRole());
+	}
+
+	public void deleteUser(long id) {
+		userRepository.deleteUser(id);
 	}
 }

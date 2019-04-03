@@ -1,0 +1,30 @@
+<div>
+    <ul class="pagination justify-content-center">
+        <li class="page-item" ng-class="(paginationCtrl.lowerBound < paginationCtrl.currPage) ? '' : 'disabled'">
+            <a class="page-link" href="{{paginationCtrl.hrefPrefix}}{{paginationCtrl.currPage - 1}}"
+                aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <li class="page-item" ng-repeat="i in paginationCtrl.prependPages">
+            <a class="page-link" href="{{paginationCtrl.hrefPrefix}}{{i}}">{{i}}</a>
+        </li>
+
+        <li class="page-item active">
+            <a class="page-link" href="{{paginationCtrl.hrefPrefix}}{{paginationCtrl.currPage}}">
+                {{paginationCtrl.currPage}}
+            </a>
+        </li>
+
+        <li class="page-item" ng-repeat="i in paginationCtrl.appendPages">
+            <a class="page-link" href="{{paginationCtrl.hrefPrefix}}{{i}}">{{i}}</a>
+        </li>
+
+        <li class="page-item" ng-class="(paginationCtrl.upperBound > paginationCtrl.currPage) ? '' : 'disabled'">
+            <a class="page-link" href="{{paginationCtrl.hrefPrefix}}{{paginationCtrl.currPage + 1}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</div>

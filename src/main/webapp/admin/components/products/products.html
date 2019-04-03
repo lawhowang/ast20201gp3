@@ -1,0 +1,51 @@
+<div>
+    <div class="row">
+        <div class="col-12 col-md-5 col-lg-3 col-xl-3">
+            <form ng-submit="productsCtrl.submitSearch()">
+                <div class="input-group mb-3 mt-3">
+                    <div class="input-group-prepend" ng-if="productsCtrl.searchMode">
+                        <a href='#!products/products' class="btn btn-danger">
+                            <span aria-hidden="true">&times;</span></a>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search by name" aria-label="ProductName"
+                        aria-describedby="basic-addon2" ng-model="productsCtrl.q">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div></div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Price</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="product in productsCtrl.products" class="fade-in-view">
+                <td class="align-middle">{{product.id}}</td>
+                <td class="align-middle">{{product.name}}</td>
+                <td class="align-middle">
+                    <span ng-repeat="category in product.categories">
+                        <a class="text-secondary">{{category.name}}</a><span ng-repeat-end ng-if="!$last">,&nbsp;</span>
+                    </span>
+                </td>
+                <td class="align-middle">${{product.price}}</td>
+                <td class="align-middle text-right"><a href="{{'#!/products/edit-product/' + product.id}}" class="btn btn-outline-primary">View/Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        <pagination ng-if="productsCtrl.maxPages" curr-page="productsCtrl.currPage" max-pages="productsCtrl.maxPages"
+            href-prefix="{{productsCtrl.searchMode ? '#!products/products/search/' + productsCtrl.q + '/' : '#!products/products/'}}">
+        </pagination>
+    </div>
+</div>

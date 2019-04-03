@@ -1,0 +1,117 @@
+<div class="px-3 py-2 py-md-4">
+    <form ng-submit="editProductCtrl.submit()">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <div class="form-group row">
+                    <label for="id" class="col-sm-2 col-form-label">ID</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="id" placeholder="ID"
+                            ng-model="editProductCtrl.product.id" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Product Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name" placeholder="Product Name"
+                            ng-model="editProductCtrl.product.name"
+                            ng-class="{ 'is-invalid' : editProductCtrl.errors.name }">
+                        <div class="invalid-feedback" ng-show="editProductCtrl.errors.name"
+                            ng-repeat="error in editProductCtrl.errors.name">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="price" class="col-sm-2 col-form-label">Price</label>
+                    <div class="col-sm-10">
+                        <input type="number" step=".01" class="form-control" id="price" placeholder="Price"
+                            ng-model="editProductCtrl.product.price"
+                            ng-class="{ 'is-invalid' : editProductCtrl.errors.price }">
+                        <div class="invalid-feedback" ng-show="editProductCtrl.errors.price"
+                            ng-repeat="error in editProductCtrl.errors.price">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="input-group mb-3">
+                        <label for="description" class="col-sm-2 col-form-label">Image</label>
+                        <div class="col-sm-10">
+                            <img ng-if="editProductCtrl.product.image" ng-src="{{'/' + editProductCtrl.product.image}}" width="200" height="200"/>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputImage" upload
+                                    ng-model="editProductCtrl.productImage">
+                                <label class="custom-file-label"
+                                    for="inputImage">{{editProductCtrl.productImage ? editProductCtrl.productImage[0].name : 'Click here to upload image'}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="description" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                        <textarea rows="4" class="form-control" id="description" placeholder="Description"
+                            ng-model="editProductCtrl.product.description"
+                            ng-class="{ 'is-invalid' : editProductCtrl.errors.description }">
+                                </textarea>
+                        <div class="invalid-feedback" ng-show="editProductCtrl.errors.description"
+                            ng-repeat="error in editProductCtrl.errors.description">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-2">
+                <script type="text/ng-template" id="category-tree">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="{{ category.id }}" ng-checked="editProductCtrl.categoryIndex(category) > -1" ng-click="editProductCtrl.toggleCategory(category)">
+                        <label class="custom-control-label" for="{{ category.id }}">{{ category.name }}</label>
+                    </div>
+                    
+                    <ul ng-if="category.children">
+                        <li ng-repeat="category in category.children" ng-include="'category-tree'">           
+                        </li>
+                    </ul>
+                </script>
+                <h6>Category</h6>
+                <ul class="list-group category-tree">
+                    <li class="list-group-item" ng-repeat="category in editProductCtrl.categories"
+                        ng-include="'category-tree'">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row py-4 justify-content-center">
+            <div class="col-sm-10 text-center">
+                <div class="text-success mb-4" ng-if="editProductCtrl.success">Changes saved successfully</div>
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">Back</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal"
+                    data-target="#deleteProductModal">Delete
+                    Product</button>
+            </div>
+            <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog"
+                aria-labelledby="deleteProductModalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteProductModalTitle">Delete Product</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure to delete this product?<br>This action cannot be undone.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                ng-click="editProductCtrl.deleteProduct()">Yes,
+                                please delete it</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

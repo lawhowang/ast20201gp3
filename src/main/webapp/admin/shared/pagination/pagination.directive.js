@@ -5,7 +5,7 @@ angular
 function pagination() {
     var directive = {
         replace: true,
-        templateUrl: '/admin/components/pagination/pagination.html',
+        templateUrl: '/admin/shared/pagination/pagination.html',
         restrict: 'EA',
         scope: {
             currPage: '=',

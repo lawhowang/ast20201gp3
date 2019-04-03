@@ -25,32 +25,32 @@ public class User {
 	private long id;
 
 	@NotBlank(groups = { ValidationGroup.SignupUser.class,
-			ValidationGroup.EditUser.class }, message = "Username is a required field")
+			ValidationGroup.EditUser.class, ValidationGroup.AddUser.class }, message = "Username is a required field")
 	@Size(groups = { ValidationGroup.SignupUser.class,
-			ValidationGroup.EditUser.class }, min = 6, max = 12, message = "Username length must be between 6 and 12 characters")
+			ValidationGroup.EditUser.class, ValidationGroup.AddUser.class }, min = 6, max = 12, message = "Username length must be between 6 and 12 characters")
 	@Pattern(groups = { ValidationGroup.SignupUser.class,
-			ValidationGroup.EditUser.class }, regexp = "^[a-zA-Z0-9_]*$", message = "Username can only contain letters and numbers")
+			ValidationGroup.EditUser.class, ValidationGroup.AddUser.class }, regexp = "^[a-zA-Z0-9_]*$", message = "Username can only contain letters and numbers")
 	private String username;
 
 	@NotBlank(groups = { ValidationGroup.SigninUser.class,
-			ValidationGroup.SignupUser.class }, message = "Password is a required field")
+			ValidationGroup.SignupUser.class, ValidationGroup.AddUser.class }, message = "Password is a required field")
 	@Size(groups = { ValidationGroup.SigninUser.class,
-			ValidationGroup.SignupUser.class }, min = 6, max = 12, message = "Password length must be between 6 and 12 characters")
+			ValidationGroup.SignupUser.class, ValidationGroup.AddUser.class }, min = 6, max = 12, message = "Password length must be between 6 and 12 characters")
 	@Pattern(groups = {
 			ValidationGroup.EditUser.class }, regexp = "^$|^.{6,12}$", message = "Either leave password field empty or set a valid password with length 6 ~ 12")
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
 	@NotBlank(groups = { ValidationGroup.SignupUser.class,
-			ValidationGroup.EditUser.class }, message = "Email is a required field")
+			ValidationGroup.EditUser.class, ValidationGroup.AddUser.class }, message = "Email is a required field")
 	@Email(groups = { ValidationGroup.SignupUser.class,
-			ValidationGroup.EditUser.class }, message = "Please provide a valid email address")
+			ValidationGroup.EditUser.class, ValidationGroup.AddUser.class }, message = "Please provide a valid email address")
 	private String email;
 
 	private String phone;
 	private String address;
 
-	@NotBlank(groups = { ValidationGroup.EditUser.class }, message = "Role is a required field")
+	@NotBlank(groups = { ValidationGroup.EditUser.class, ValidationGroup.AddUser.class }, message = "Role is a required field")
 	private String role;
 
 	@JsonProperty(access = Access.WRITE_ONLY)

@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class FieldErrorResponse {
 	
 	private Map<String, Set<String>> errors;

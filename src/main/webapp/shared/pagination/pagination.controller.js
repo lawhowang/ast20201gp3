@@ -29,7 +29,7 @@
             vm.prependPages = [];
             vm.appendPages = [];
 
-            for (var i =vm.lowerBound; i < vm.currPage; i++) {
+            for (var i = vm.lowerBound; i < vm.currPage; i++) {
                 vm.prependPages.push(i);
             }
 

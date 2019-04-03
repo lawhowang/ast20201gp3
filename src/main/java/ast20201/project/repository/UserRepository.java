@@ -15,9 +15,10 @@ public class UserRepository {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public void addUser(String username, String hashedPassword, String email, String phone, String address) {
+	public void addUser(String username, String hashedPassword, String email, String phone, String address,
+			String role) {
 		jdbcTemplate.update("INSERT INTO User (username, password, email, phone, address, role, create_date)"
-				+ "VALUES (?, ?, ?, ?, ?, 'user', NOW())", username, hashedPassword, email, phone, address);
+				+ "VALUES (?, ?, ?, ?, ?, ?, NOW())", username, hashedPassword, email, phone, address, role);
 	}
 
 	public boolean checkUsernameDuplicated(String username) {
@@ -71,7 +72,14 @@ public class UserRepository {
 		return getUserById(id);
 	}
 
-	public void updateUser(long id, String username, String hashedPassword, String email, String phone, String address, String role) {
-		jdbcTemplate.update("UPDATE User SET username = ?, password = ?, email = ?, phone = ?, address = ?, role = ? WHERE id = ?", new Object[] { username, hashedPassword, email, phone, address, role, id });
+	public void updateUser(long id, String username, String hashedPassword, String email, String phone, String address,
+			String role) {
+		jdbcTemplate.update(
+				"UPDATE User SET username = ?, password = ?, email = ?, phone = ?, address = ?, role = ? WHERE id = ?",
+				new Object[] { username, hashedPassword, email, phone, address, role, id });
+	}
+
+	public void deleteUser(long id) {
+		jdbcTemplate.update("DELETE FROM User WHERE id = ?", new Object[] { id });
 	}
 }

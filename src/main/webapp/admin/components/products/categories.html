@@ -1,0 +1,48 @@
+<div>
+    <div class="row">
+        <div class="col-12 col-md-5 col-lg-3 col-xl-3">
+            <form ng-submit="categoriesCtrl.addCategory()">
+                <div class="input-group mb-3 mt-3">
+                    <input type="text" class="form-control" placeholder="Category name" aria-label="Category"
+                        aria-describedby="basic-addon2" ng-model="categoriesCtrl.categoryName">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div></div>
+    </div>
+    <script type="text/ng-template" id="nodes_renderer.html">
+        <div ui-tree-handle>
+            <div>
+                <span>
+                    <span><span class="text-secondary">#{{category.id}}</span>
+                     - <span class="cat-name" ng-if="!categoriesCtrl.edit[category.id]">{{category.name}}</span>
+                    <input type="text" class="edit-cat-name" ng-model="category.name" data-nodrag ng-if="categoriesCtrl.edit[category.id]"/>
+                    <i class="fas fa-pen ml-2 text-secondary edit-btn" data-nodrag ng-click="categoriesCtrl.editCategoryName(category.id)"></i>
+                </span>
+                <span class="float-right" data-nodrag>
+                    <button type="button" class="close" aria-label="Close" ng-click="categoriesCtrl.removeCategory(this)" style="line-height: 18px;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <ol ui-tree-nodes="" ng-model="category.children">
+            <li ng-repeat="category in category.children" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+        </ol>
+    </script>
+    <div ui-tree="categoriesCtrl.treeOptions" class="categories">
+        <ol ui-tree-nodes="" ng-model="categoriesCtrl.categories" id="tree-root">
+            <li ng-repeat="category in categoriesCtrl.categories" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+        </ol>
+    </div>
+    <div class="form-group row py-4 justify-content-center">
+        <div class="col-sm-10 text-center">
+            <div class="text-success mb-4" ng-if="categoriesCtrl.success">Changes saved successfully</div>
+            <div class="text-danger mb-4" ng-if="categoriesCtrl.failure">Failed to save changes</div>
+            <button type="submit" class="btn btn-primary" ng-click="categoriesCtrl.saveChanges()">Save Changes</button>
+        </div>
+    </div>
+</div>

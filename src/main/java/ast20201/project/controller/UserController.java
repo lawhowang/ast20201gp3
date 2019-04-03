@@ -65,6 +65,7 @@ public class UserController {
 		String plainPassword = user.getPassword();
 		String hashedPassword = DigestUtils.md5DigestAsHex(plainPassword.getBytes());
 		user.setPassword(hashedPassword);	// User posted password are not yet hashed, therefore hash it before inserting to db
+		user.setRole("user");	// Default role for sign up user
 		userService.addUser(user);
 
 		// Authentication after registration

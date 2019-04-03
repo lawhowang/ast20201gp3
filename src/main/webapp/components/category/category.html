@@ -1,0 +1,27 @@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">{{categoryCtrl.category.name}}</h1>
+        <p class="lead"></p>
+    </div>
+</div>
+<div class="container category">
+    <div class="row mt-4">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3" ng-repeat="product in categoryCtrl.products">
+            <div class="card product shadow-sm">
+                <a href="{{'#!products/' + product.id}}">
+                    <img class="card-img-top" ng-src="{{product.image}}" ng-if="product.image" alt="Card image cap">
+                </a>
+                <div class="card-body text-center">
+                    <h5 class="card-title font-weight-normal">{{product.name}}</h5>
+                    <h5 class="card-text text-secondary font-weight-normal">${{product.price}}</h5>
+                    <a href="{{'#!products/' + product.id}}" class="btn btn-outline-primary">View Product</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="my-4">
+        <pagination ng-if="categoryCtrl.maxPages" curr-page="categoryCtrl.currPage" max-pages="categoryCtrl.maxPages"
+            href-prefix="{{ '#!categories/' + categoryCtrl.categoryId + '/' }}">
+        </pagination>
+    </div>
+</div>

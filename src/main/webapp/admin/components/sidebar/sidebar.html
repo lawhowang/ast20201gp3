@@ -1,5 +1,5 @@
 <div class="nav-menu col-12 col-md-3 col-lg-2 col-xl-2 p-0">
-    <div class="brand">EShop</div>
+    <div class="brand"><a href="../" class="text-light card-link">{{sidebarCtrl.siteTitle}}</a></div>
     <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
     <div class="menu-list">
         <ul id="menu-content" class="menu-content collapse out">
@@ -9,29 +9,39 @@
                 </a>
             </li>
 
-            <li data-toggle="collapse" data-target="#user" class="collapsed">
+            <li data-toggle="collapse" data-target="#user" class="{ collapsed: !sidebarCtrl.isActive('/users') }">
                 <a><i class="fas fa-users"></i>Users<span class="arrow"></span></a>
             </li>
-            <ul class="sub-menu " id="user" ng-class="sidebarCtrl.isActive('/users') ? 'show' : 'collapse'">
-                <li ng-class="{ active: sidebarCtrl.isActive('/users/all-users') }"><a href="#!users/all-users">All Users</a></li>
-                <li ng-class="{ active: sidebarCtrl.isActive('/users/add-user') }"><a href="#!users/add-user">Add User</a></li>
+            <ul class="sub-menu collapse" id="user" ng-class="::{ show: sidebarCtrl.isActive('/users') }">
+                <li ng-class="{ active: sidebarCtrl.isActive('/users/all-users') }"><a href="#!users/all-users">All
+                        Users</a></li>
+                <li ng-class="{ active: sidebarCtrl.isActive('/users/add-user') }"><a href="#!users/add-user">Add
+                        User</a></li>
             </ul>
 
 
-            <li data-toggle="collapse" data-target="#product" class="collapsed">
-                <a ><i class="fas fa-box"></i>Products<span class="arrow"></span></a>
+            <li data-toggle="collapse" data-target="#product" class="{ collapsed: !sidebarCtrl.isActive('/products') }">
+                <a><i class="fas fa-box"></i>Products<span class="arrow"></span></a>
             </li>
-            <ul class="sub-menu collapse" id="product">
-                <li><a >Categories</a></li>
-                <li><a >Products</a></li>
+            <ul class="sub-menu collapse" id="product"
+                ng-class="::{ show: sidebarCtrl.isActive('/products') }">
+                <li ng-class="{ active: sidebarCtrl.isActive('/products/categories') }"><a
+                        href="#!products/categories">Categories</a></li>
+                <li ng-class="{ active: sidebarCtrl.isActive('/products/products') }"><a
+                        href="#!products/products">Products</a></li>
+                <li ng-class="{ active: sidebarCtrl.isActive('/products/add-product') }"><a
+                        href="#!products/add-product">Add
+                        Product</a></li>
             </ul>
 
 
-            <li data-toggle="collapse" data-target="#setting" class="collapsed">
-                <a ><i class="fas fa-cogs"></i>Settings<span class="arrow"></span></a>
+            <li data-toggle="collapse" data-target="#setting" class="{ collapsed: !sidebarCtrl.isActive('/settings') }">
+                <a><i class="fas fa-cogs"></i>Settings<span class="arrow"></span></a>
             </li>
-            <ul class="sub-menu collapse" id="setting">
-                <li><a >Site Configuration</a></li>
+            <ul class="sub-menu collapse" id="setting"
+                ng-class="::{ show: sidebarCtrl.isActive('/settings') }">
+                <li ng-class="{ active: sidebarCtrl.isActive('/settings/site-config') }"><a
+                        href="#!settings/site-config">Site Configuration</a></li>
             </ul>
         </ul>
     </div>

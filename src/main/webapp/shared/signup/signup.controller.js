@@ -11,11 +11,12 @@
         var vm = this;
 
         vm.signup = signup;
-        vm.error = {};
+        vm.errors = {};
 
         function signup() {
             if (vm.confirmPassword != vm.password) {
-                vm.error.confirmPassword = ["The confirm password does not match with the password"];
+                console.log("test");
+                vm.errors.confirmPassword = ["The confirm password does not match with the password"];
                 return;
             }
 

@@ -1,0 +1,21 @@
+<div class="px-3 py-2 py-md-4">
+        <form ng-submit="siteConfigCtrl.submit()">
+            <div class="form-group row" ng-repeat="config in siteConfigCtrl.configs">
+                <label for="site-title" class="col-sm-2 col-form-label">{{config.key}}</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="site-title" placeholder="{{config.key}}"
+                        ng-model="config.val" ng-class="{ 'is-invalid' : siteConfigCtrl.errors[config.key] }">
+                    <div class="invalid-feedback" ng-show="siteConfigCtrl.errors[config.key]"
+                        ng-repeat="error in siteConfigCtrl.errors[config.key]">
+                        {{error}}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row py-4 justify-content-center">
+                <div class="col-sm-10 text-center">
+                    <div class="text-success mb-4" ng-if="siteConfigCtrl.success">Changes saved successfully</div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </form>
+    </div>

@@ -12,4 +12,8 @@ public class ValidationGroup {
     public interface EditUser {
 
     }
+
+    public interface AddUser {
+
+    }
 }

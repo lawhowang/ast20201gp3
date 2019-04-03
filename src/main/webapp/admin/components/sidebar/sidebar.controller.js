@@ -5,9 +5,9 @@
         .module('app')
         .controller('SidebarCtrl', SidebarCtrl);
 
-    SidebarCtrl.$inject = ['$location'];
+    SidebarCtrl.$inject = ['$location', 'settingService'];
 
-    function SidebarCtrl($location) {
+    function SidebarCtrl($location, settingService) {
         var vm = this;
         vm.isRoot = function (location) {
             return location === $location.path();
@@ -15,5 +15,12 @@
         vm.isActive = function (location) {
             return $location.path().startsWith(location);
         }
+        settingService.getSiteConfig()
+            .then(function successCallback(response) {
+                console.log(response);
+                vm.siteTitle = response.data[0].val;
+            }, function errorCallback(response) {
+
+            });
     }
 })();

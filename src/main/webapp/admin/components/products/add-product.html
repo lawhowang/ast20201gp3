@@ -1,0 +1,82 @@
+<div class="px-3 py-2 py-md-4">
+    <form ng-submit="addProductCtrl.submit()" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Product Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name" placeholder="Name"
+                            ng-model="addProductCtrl.product.name"
+                            ng-class="{ 'is-invalid' : addProductCtrl.errors.name }">
+                        <div class="invalid-feedback" ng-show="addProductCtrl.errors.name"
+                            ng-repeat="error in addProductCtrl.errors.name">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="price" class="col-sm-2 col-form-label">Price</label>
+                    <div class="col-sm-10">
+                        <input type="number" step="0.01" class="form-control" id="price" placeholder="Price"
+                            ng-model="addProductCtrl.product.price"
+                            ng-class="{ 'is-invalid' : addProductCtrl.errors.price }">
+                        <div class="invalid-feedback" ng-show="addProductCtrl.errors.price"
+                            ng-repeat="error in addProductCtrl.errors.price">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="input-group mb-3">
+                        <label for="description" class="col-sm-2 col-form-label">Image</label>
+                        <div class="col-sm-10">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputImage" upload
+                                    ng-model="addProductCtrl.productImage">
+                                <label class="custom-file-label"
+                                    for="inputImage">{{addProductCtrl.productImage ? addProductCtrl.productImage[0].name : 'Click here to upload image'}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="description" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="description" placeholder="Description"
+                            ng-model="addProductCtrl.product.description"
+                            ng-class="{ 'is-invalid' : addProductCtrl.errors.description }" rows="4">
+                        </textarea>
+                        <div class="invalid-feedback" ng-show="addProductCtrl.errors.description"
+                            ng-repeat="error in addProductCtrl.errors.description">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-2">
+                <script type="text/ng-template" id="category-tree">
+                    <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="{{ category.id }}" ng-checked="addProductCtrl.categoryIndex(category) > -1" ng-click="addProductCtrl.toggleCategory(category)">
+                        <label class="custom-control-label" for="{{ category.id }}">{{ category.name }}</label>
+                    </div>
+                    <ul ng-if="category.children">
+                        <li ng-repeat="category in category.children" ng-include="'category-tree'">           
+                        </li>
+                    </ul>
+                </script>
+                <h6>Category</h6>
+                <ul class="list-group category-tree">
+                    <li class="list-group-item" ng-repeat="category in addProductCtrl.categories"
+                        ng-include="'category-tree'">
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row py-4 justify-content-center">
+            <div class="col-sm-10 text-center">
+                <div class="text-success mb-4" ng-if="addProductCtrl.success">Add product successfully</div>
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -17,8 +17,8 @@
             vm.searchMode = false;
             userService.getAllUsers(page)
                 .then(function successCallback(response) {
-                    vm.users = response.data.users;
-                    console.log(vm.users);
+                    console.log(response);
+                    vm.users = response.data.items;
                     vm.maxPages = response.data.maxPages;
                     vm.currPage = response.data.currPage;
                     vm.loaded = true;
@@ -29,7 +29,8 @@
         };
 
         vm.submitSearch = function () {
-            $location.path('/users/all-users/search/' + vm.q);
+            if (vm.q)
+                $location.path('/users/all-users/search/' + vm.q);
         };
 
         vm.searchUsers = function (q, page) {
@@ -37,8 +38,8 @@
             vm.searchMode = true;
             userService.searchUsers(q, page)
                 .then(function successCallback(response) {
-                    vm.users = response.data.users;
-                    console.log(vm.users);
+                    console.log(response);
+                    vm.users = response.data.items;
                     vm.maxPages = response.data.maxPages;
                     vm.currPage = response.data.currPage;
                     vm.loaded = true;
