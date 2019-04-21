@@ -5,12 +5,16 @@
         .module('app')
         .controller('PaginationCtrl', PaginationCtrl);
 
-    function PaginationCtrl() {
+    PaginationCtrl.$inject = ['$location', '$scope'];
+
+    function PaginationCtrl($location, $scope) {
         var vm = this;
         vm.$onInit = onInit;
+        vm.prevPage = prevPage;
+        vm.nextPage = nextPage;
+        vm.goToPage = goToPage;
 
         function onInit() {
-
             vm.lowerBound = vm.currPage - 5;
             vm.upperBound = vm.currPage + 5;
             vm.currPage = vm.currPage;
@@ -37,5 +41,26 @@
                 vm.appendPages.push(i);
             }
         }
+
+        function prevPage() {
+            goToPage(vm.currPage - 1);
+        }
+
+        function nextPage() {
+            goToPage(vm.currPage + 1);
+        }
+
+        function goToPage(page) {
+            if (vm.func) {
+                vm.func({
+                    page: page
+                });
+            } else {
+                $location.url(vm.hrefPrefix + page);
+            }
+        }
+        $scope.$watch('paginationCtrl.currPage', function (newVal, oldVal) {
+            onInit();
+        });
     }
 })();

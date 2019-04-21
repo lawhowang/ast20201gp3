@@ -3,6 +3,12 @@ package ast20201.project.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import ast20201.project.model.User;
@@ -10,12 +16,40 @@ import ast20201.project.repository.UserRepository;
 
 @Service
 public class UserService {
+
+	@Autowired
+	AuthenticationManager authenticationManager;
+
 	@Autowired
 	UserRepository userRepository;
 
+	public User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		try {
+			User user = (User) authentication.getPrincipal();
+			User res = userRepository.getUser(user.getId());
+			return res;
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+
 	public void addUser(User user) {
-		userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getPhone(),
-				user.getAddress(), user.getRole());
+		user.setRole("user"); // Default role for sign up user
+		userRepository.addUser(user.getUsername(), user.getPassword(), user.getEmail(), user.getRole());
+	}
+
+	public User loginUser(User user) throws UsernameNotFoundException, BadCredentialsException {
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(user.getUsernameOrEmail(), user.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		User dbUser = (User) authentication.getPrincipal();
+		userRepository.updateLastLogin(dbUser.getId());
+		return dbUser;
+	}
+
+	public void logoutUser() {
+		SecurityContextHolder.getContext().setAuthentication(null);
 	}
 
 	public User getUserById(Long userId) {
@@ -34,10 +68,6 @@ public class UserService {
 		return userRepository.checkEmailDuplicated(email);
 	}
 
-	public void updateLastLogin(Long userId) {
-		userRepository.updateLastLogin(userId);
-	}
-
 	public int getTotalUserCount() {
 		return userRepository.getTotalUserCount();
 	}
@@ -53,10 +83,10 @@ public class UserService {
 	public User getUser(long id) {
 		return userRepository.getUser(id);
 	}
-
+	
 	public void updateUser(User dbuser) {
 		userRepository.updateUser(dbuser.getId(), dbuser.getUsername(), dbuser.getPassword(), dbuser.getEmail(),
-				dbuser.getPhone(), dbuser.getAddress(), dbuser.getRole());
+				dbuser.getRole());
 	}
 
 	public void deleteUser(long id) {

@@ -56,6 +56,10 @@
             return $http.put("/admin/api/users/", data);
         }
 
+        function addUser(data) {
+            return $http.post(`/admin/api/users/`, data);
+        }
+
         function deleteUser(id) {
             var data = {
                 id: id

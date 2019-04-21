@@ -1,9 +1,15 @@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Product</h1>
+        <p class="lead"></p>
+    </div>
+</div>
 <div class="container category">
     <div class="row mt-4">
-        <div class="col-12 col-sm-6">
-            <img ng-src="{{productCtrl.product.image}}" class="w-100 p-5"/>
+        <div class="col-12 col-md-4">
+            <img ng-src="{{productCtrl.product.image}}" class="w-100 p-5" />
         </div>
-        <div class="col-12 col-sm-6 p-3">
+        <div class="col-12 col-md-8 p-3">
             <div class="row">
                 <div class="col-12">
                     <h1>{{productCtrl.product.name}}</h1>
@@ -15,15 +21,131 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <p>{{productCtrl.product.description}}</p>
+                <div class="col-3 text-secondary">
+                    Description
                 </div>
+                <div class="col-9">
+                    <p>{{productCtrl.product.description ? productCtrl.product.description : 'Product does not have any description yet'}}
+                    </p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-3 text-secondary">
+                    Categories
+                </div>
+                <div class="col-9">
+                    <span ng-repeat="category in productCtrl.product.categories"><a
+                            href="#!/categories/{{category.id}}">{{category.name}}</a><span
+                            ng-show="!$last">,&nbsp</span></span>
+                </div>
+            </div>
+            <div class="row mb-3" ng-if="productCtrl.product.quantity != null">
+                <div class="col-3 text-secondary">
+                    Stock Status
+                </div>
+                <div class="col-9">
+                    <p class="text-secondary"
+                        ng-class="productCtrl.product.quantity > 0 ? 'text-success' : 'text-danger'">
+                        {{productCtrl.product.quantity}} left in stock</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-auto">
+                    <div class="input-group mb-3" ng-if="!productCtrl.addedToCart">
+                        <div class="input-group-prepend">
+                            <button type="button" class="btn btn-primary"
+                                ng-class="{ 'disabled' : productCtrl.amount == 1 }"
+                                ng-click="productCtrl.amount = (productCtrl.amount > 1 ? productCtrl.amount - 1 : productCtrl.amount)"><i
+                                    class="fas fa-minus"></i></button>
+                        </div>
+                        <input type="number" class="form-control inline text-center" placeholder="Quantity"
+                            ng-model="productCtrl.amount" min="1"
+                            ng-change="productCtrl.updateAmount(productCtrl.amount, {{productCtrl.amount}})"
+                            oninput="this.value = Math.abs(this.value)">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-primary"
+                                ng-class="{ 'disabled' : productCtrl.amount >= productCtrl.product.quantity && productCtrl.product.quantity != null }"
+                                ng-click="productCtrl.amount = (productCtrl.amount >= productCtrl.product.quantity && productCtrl.product.quantity != null ? productCtrl.amount : productCtrl.amount + 1)"><i
+                                    class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="alert alert-success" role="alert" ng-if="productCtrl.addedToCartMessage"
+                        ng-class="{ 'alert-danger': addToCartError }">
+                        Successfully added item to cart
+                        <button type="button" class="close" ng-click="productCtrl.addedToCartMessage = false">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <a href="" class="btn btn-primary btn-lg w-100 w-lg-auto" ng-if="!productCtrl.addedToCart"
+                        ng-click="productCtrl.addToCart()"
+                        ng-class="{ 'disabled' : productCtrl.product.quantity == 0 || productCtrl.amount == 0 || (productCtrl.amount > productCtrl.product.quantity && productCtrl.product.quantity != null) }">Add
+                        to cart</a>
+                    <a href="#!/cart" class="btn btn-primary btn-lg w-100 w-lg-auto"
+                        ng-if="productCtrl.addedToCart">View in cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row mt-4">
+        <div class="col-12 mb-3">
+            <h6 class="text-secondary">Comments</h6>
+        </div>
+        <div class="col-12 mb-4">
+            <div class="alert alert-warning" role="alert" ng-if="productCtrl.commentResponse">
+                {{productCtrl.commentResponse}}
+                <button type="button" class="close" ng-click="productCtrl.commentResponse = null" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <a href="" class="btn btn-primary btn-lg">Add to cart</a>
+                <div class="col-12 col-lg-10">
+                    <textarea class="form-control" rows="4" placeholder="Your review here..." required
+                        ng-model="productCtrl.comment"></textarea>
+                </div>
+                <div class="col-12 col-lg-2">
+                    <div class="text-warning text-center mt-3 mt-lg-0">Rating</div>
+                    <div class="mt-2 mb-3 text-center text-warning" style="cursor: pointer;">
+                        <i class="far fa-star mr-1" ng-class="{ 'fas' : productCtrl.rating >= 1}"
+                            ng-mouseover="productCtrl.rating = 1" ng-click="productCtrl.rating = 1"></i>
+                        <i class="far fa-star mr-1" ng-class="{ 'fas' : productCtrl.rating >= 2}"
+                            ng-mouseover="productCtrl.rating = 2" ng-click="productCtrl.rating = 2"></i>
+                        <i class="far fa-star mr-1" ng-class="{ 'fas' : productCtrl.rating >= 3}"
+                            ng-mouseover="productCtrl.rating = 3" ng-click="productCtrl.rating = 3"></i>
+                        <i class="far fa-star mr-1" ng-class="{ 'fas' : productCtrl.rating >= 4}"
+                            ng-mouseover="productCtrl.rating = 4" ng-click="productCtrl.rating = 4"></i>
+                        <i class="far fa-star" ng-class="{ 'fas' : productCtrl.rating >= 5}"
+                            ng-mouseover="productCtrl.rating = 5" ng-click="productCtrl.rating = 5"></i>
+                    </div>
+                    <button type="button" class="btn btn-outline-warning w-100" ng-click="productCtrl.submitComment()">
+                        Submit
+                    </button>
                 </div>
             </div>
+
+        </div>
+        <div class="col-12">
+            <div class="text-center text-secondary mt-3" ng-if="productCtrl.comments.items.length == 0">
+                No comments yet
+            </div>
+            <div class="rounded bg-light p-3 mb-2" ng-repeat="comment in productCtrl.comments.items">
+                <i class="far fa-user-circle avatar px-1 align-baseline"></i>
+                {{comment.username}}
+                <span class="text-secondary mx-2">&nbsp;|</span>
+                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 1}"></i>
+                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 2}"></i>
+                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 3}"></i>
+                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 4}"></i>
+                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 5}"></i>
+                <hr>
+                {{comment.comment}}
+            </div>
+        </div>
+        <div class="col-12 mt-3">
+            <pagination ng-if="productCtrl.comments.maxPages" curr-page="productCtrl.comments.currPage"
+                max-pages="productCtrl.comments.maxPages" func="productCtrl.getComments(page)">
+            </pagination>
         </div>
     </div>
 </div>

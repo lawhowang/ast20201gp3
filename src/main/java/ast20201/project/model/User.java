@@ -6,6 +6,7 @@ package ast20201.project.model;
 
 import ast20201.project.validation.ValidationGroup;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import javax.validation.constraints.Email;
@@ -47,9 +48,6 @@ public class User {
 			ValidationGroup.EditUser.class, ValidationGroup.AddUser.class }, message = "Please provide a valid email address")
 	private String email;
 
-	private String phone;
-	private String address;
-
 	@NotBlank(groups = { ValidationGroup.EditUser.class, ValidationGroup.AddUser.class }, message = "Role is a required field")
 	private String role;
 
@@ -57,6 +55,7 @@ public class User {
 	private Timestamp create_date;
 
 	private Timestamp last_login_date;
+	private BigDecimal credits;
 
 	public long getId() {
 		return id;
@@ -105,22 +104,6 @@ public class User {
 		this.email = email;
 	}
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 	public String getRole() {
 		return role;
 	}
@@ -144,5 +127,13 @@ public class User {
 	public void setLast_login_date(Timestamp last_login_date) {
 		this.last_login_date = last_login_date;
 	}
+
+    public BigDecimal getCredits() {
+        return credits;
+    }
+
+    public void setCredits(BigDecimal credits) {
+        this.credits = credits;
+    }
 
 }

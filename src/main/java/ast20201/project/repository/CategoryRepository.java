@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -59,8 +59,15 @@ public class CategoryRepository {
 		updateCategories(0, categoryList, 0);
 	}
 
-	//	Recursive function
+	// Recursive function
 	private void updateCategories(long parentId, List<Category> categories, int level) {
+		// Delete categories
+		String ids = categories.stream().map(cat -> String.valueOf(cat.getId())).collect(Collectors.joining(","));
+		if (ids != null && ids.length() > 0)
+			jdbcTemplate.update("DELETE FROM category WHERE id NOT IN( " + ids + ")");
+		else
+			jdbcTemplate.update("DELETE FROM category");
+
 		int priority = 0;
 		for (Category subCategory : categories) {
 			if (hasCategory(subCategory.getId())) {

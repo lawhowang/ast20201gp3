@@ -27,15 +27,19 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 
 import ast20201.project.model.User;
+import ast20201.project.model.UserWithProfile;
 import ast20201.project.model.Category;
 import ast20201.project.model.FieldErrorResponse;
+import ast20201.project.model.Order;
 import ast20201.project.model.PageData;
 import ast20201.project.model.PageableList;
 import ast20201.project.model.Product;
 import ast20201.project.model.ProductFilter;
 import ast20201.project.model.SiteConfig;
 import ast20201.project.service.CategoryService;
+import ast20201.project.service.OrderService;
 import ast20201.project.service.ProductService;
+import ast20201.project.service.ProfileService;
 import ast20201.project.service.SettingService;
 import ast20201.project.service.UserService;
 import ast20201.project.validation.ValidationGroup;
@@ -53,6 +57,10 @@ public class AdminController {
 	ProductService productService;
 	@Autowired
 	SettingService settingService;
+	@Autowired
+	OrderService orderService;
+	@Autowired
+	ProfileService profileService;
 
 	final int maxItemsPerPage = 10;
 
@@ -79,20 +87,24 @@ public class AdminController {
 
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public ResponseEntity<?> getUser(@RequestParam(value = "id") long id, ModelMap model) {
-		User user = userService.getUser(id);
+		UserWithProfile user = profileService.getProflie(id);
 		return ResponseEntity.ok(user);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateUser(@Validated({ ValidationGroup.EditUser.class }) @RequestBody User user) {
+	public ResponseEntity<?> updateUser(@Validated({ ValidationGroup.EditUser.class }) @RequestBody UserWithProfile user) {
 
 		FieldErrorResponse errors = new FieldErrorResponse();
-		if (userService.getUserByUsernameOrEmail(user.getUsername()).getId() != user.getId()) {
+
+		User u1 = userService.getUserByUsernameOrEmail(user.getUsername());
+		if (u1 != null && u1.getId() != user.getId()) {
 			errors.addErrors("username", "Username has already been taken");
 		}
-		if (userService.getUserByUsernameOrEmail(user.getEmail()).getId() != user.getId()) {
+		User u2 = userService.getUserByUsernameOrEmail(user.getEmail());
+		if (u2 != null && u2.getId() != u2.getId()) {
 			errors.addErrors("email", "Email address has already been taken");
 		}
+
 		if (errors.hasErrors()) {
 			return ResponseEntity.badRequest().body(errors);
 		}
@@ -105,15 +117,15 @@ public class AdminController {
 			dbuser.setPassword(hashedPassword);
 		}
 		dbuser.setEmail(user.getEmail());
-		dbuser.setPhone(user.getPhone());
-		dbuser.setAddress(user.getAddress());
 		dbuser.setRole(user.getRole());
 		userService.updateUser(dbuser);
-		return ResponseEntity.ok(dbuser);
+		profileService.updateProfile(user.getId(), user);
+		UserWithProfile dbuserWithProfile = profileService.getProflie(user.getId());
+		return ResponseEntity.ok(dbuserWithProfile);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public ResponseEntity<?> addUser(@Validated({ ValidationGroup.AddUser.class }) @RequestBody User user) {
+	public ResponseEntity<?> addUser(@Validated({ ValidationGroup.AddUser.class }) @RequestBody UserWithProfile user) {
 		FieldErrorResponse errors = new FieldErrorResponse();
 		if (userService.checkUsernameDuplicated(user.getUsername())) {
 			errors.addErrors("username", "Username has already been taken");
@@ -128,7 +140,9 @@ public class AdminController {
 		String hashedPassword = DigestUtils.md5DigestAsHex(plainPassword.getBytes());
 		user.setPassword(hashedPassword);
 		userService.addUser(user);
-		return ResponseEntity.ok(user);
+		User dbuser = userService.getUserByUsernameOrEmail(user.getUsername());
+		profileService.updateProfile(dbuser.getId(), user);
+		return ResponseEntity.ok(dbuser);
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.DELETE)
@@ -181,8 +195,8 @@ public class AdminController {
 	public ResponseEntity<?> updateProduct(@PathVariable("id") long id,
 			@RequestPart(value = "productImage", required = false) MultipartFile file,
 			@RequestPart("product") @Valid Product product) {
-		productService.updateProduct(id, product.getName(), product.getPrice(), product.getDescription(),
-				product.getCategories());
+		productService.updateProduct(id, product.getName(), product.getPrice(), product.getQuantity(),
+				product.getDescription(), product.getCategories());
 
 		// Upload product image
 		if (null != file) {
@@ -232,8 +246,8 @@ public class AdminController {
 	public ResponseEntity<?> addProduct(@RequestPart(value = "productImage", required = false) MultipartFile file,
 			@RequestPart("product") @Valid Product product) {
 		// Add product
-		long pk = productService.addProduct(product.getName(), product.getPrice(), product.getDescription(),
-				product.getCategories());
+		long pk = productService.addProduct(product.getName(), product.getPrice(), product.getQuantity(),
+				product.getDescription(), product.getCategories());
 		// Upload image
 		if (null != file && pk > 0) {
 			String uploadsDir = "assets/uploads/product-img/";
@@ -265,5 +279,28 @@ public class AdminController {
 	public ResponseEntity<?> updateSiteConfigs(@RequestBody List<SiteConfig> configs) {
 		settingService.updateSiteConfig(configs);
 		return ResponseEntity.ok("{}");
+	}
+
+	@RequestMapping(value = "/orders", method = RequestMethod.GET)
+	public ResponseEntity<?> getOrders(@RequestParam(value = "query", required = false) String query,
+			@RequestParam(value = "page", required = false) Integer page) {
+		if (page == null)
+			page = 1;
+		if (query == null)
+			query = "";
+		PageData<Order> orders = orderService.getOrders(query, page);
+		return ResponseEntity.ok(orders);
+	}
+
+	@RequestMapping(value = "/orders/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> getOrder(@PathVariable("id") long id) {
+		Order order = orderService.getOrder(id);
+		return ResponseEntity.ok(order);
+	}
+
+	@RequestMapping(value = "/orders/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<?> getOrder(@PathVariable("id") long id, @RequestBody Order order) {
+		Order dborder = orderService.updateOrder(id, order);
+		return ResponseEntity.ok(dborder);
 	}
 }

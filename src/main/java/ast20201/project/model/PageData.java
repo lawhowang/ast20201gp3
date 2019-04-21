@@ -12,6 +12,7 @@ public class PageData<T> {
 	private int currPage;
 	private int maxPages;
 	private List<T> items;
+	private int totalCount;
 
 	public PageData() {
 		
@@ -22,7 +23,16 @@ public class PageData<T> {
         this.currPage = currPage;
         
         int maxItemsPerPage = 10;
-        this.maxPages = (int) Math.ceil((double) totalCount / maxItemsPerPage);
+		this.maxPages = (int) Math.ceil((double) totalCount / maxItemsPerPage);
+		this.totalCount = totalCount;
+	}
+
+	public PageData(List<T> items, int currPage, int totalCount, int maxItemsPerPage) {
+		this.items = items;
+        this.currPage = currPage;
+        
+		this.maxPages = (int) Math.ceil((double) totalCount / maxItemsPerPage);
+		this.totalCount = totalCount;
 	}
 
 	public int getCurrPage() {
@@ -47,5 +57,13 @@ public class PageData<T> {
 
 	public void setItems(List<T> items) {
 		this.items = items;
+	}
+
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 	}
 }

@@ -5,20 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Product {
     private long id;
+
     @NotBlank(message = "Product name is a required field")
     private String name;
 
     @NotNull(message = "Price is a required field")
     @Digits(integer = 10, fraction = 2, message = "Please input a valid price")
     private BigDecimal price;
+
+    @Nullable
+    @Min(value = 0L, message = "Quantity must be a positive number")
+    private Integer quantity;
+
     private String description;
     private List<Category> categories;
     private String image;
@@ -27,10 +35,11 @@ public class Product {
         categories = new ArrayList<Category>();
     }
 
-    public Product(long id, String name, BigDecimal price, String description, List<Category> categories, String image) {
+    public Product(long id, String name, BigDecimal price, Integer quantity, String description, List<Category> categories, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.quantity = quantity;
         this.description = description;
         this.categories = categories;
         this.image = image;
@@ -58,6 +67,14 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     public String getDescription() {

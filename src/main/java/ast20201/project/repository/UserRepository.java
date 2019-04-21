@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.DigestUtils;
 
 import ast20201.project.model.User;
 
@@ -15,10 +16,11 @@ public class UserRepository {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public void addUser(String username, String hashedPassword, String email, String phone, String address,
-			String role) {
-		jdbcTemplate.update("INSERT INTO User (username, password, email, phone, address, role, create_date)"
-				+ "VALUES (?, ?, ?, ?, ?, ?, NOW())", username, hashedPassword, email, phone, address, role);
+	public void addUser(String username, String password, String email, String role) {
+		String hashedPassword = DigestUtils.md5DigestAsHex(password.getBytes());
+		jdbcTemplate.update(
+				"INSERT INTO User (username, password, email, role, create_date)" + "VALUES (?, ?, ?, ?, NOW())",
+				username, hashedPassword, email, role);
 	}
 
 	public boolean checkUsernameDuplicated(String username) {
@@ -33,10 +35,14 @@ public class UserRepository {
 		return count >= 1;
 	}
 
-	public User getUserByUsernameOrEmail(String usernameOrEmail) throws EmptyResultDataAccessException {
-		User user = jdbcTemplate.queryForObject("SELECT * FROM User WHERE username = ? OR email = ?",
-				new Object[] { usernameOrEmail, usernameOrEmail }, new BeanPropertyRowMapper<User>(User.class));
-		return user;
+	public User getUserByUsernameOrEmail(String usernameOrEmail) {
+		try {
+			User user = jdbcTemplate.queryForObject("SELECT * FROM User WHERE username = ? OR email = ?",
+					new Object[] { usernameOrEmail, usernameOrEmail }, new BeanPropertyRowMapper<User>(User.class));
+			return user;
+		} catch (EmptyResultDataAccessException ex) {
+			return null;
+		}
 	}
 
 	public User getUserById(Long userId) {
@@ -72,11 +78,9 @@ public class UserRepository {
 		return getUserById(id);
 	}
 
-	public void updateUser(long id, String username, String hashedPassword, String email, String phone, String address,
-			String role) {
-		jdbcTemplate.update(
-				"UPDATE User SET username = ?, password = ?, email = ?, phone = ?, address = ?, role = ? WHERE id = ?",
-				new Object[] { username, hashedPassword, email, phone, address, role, id });
+	public void updateUser(long id, String username, String hashedPassword, String email, String role) {
+		jdbcTemplate.update("UPDATE User SET username = ?, password = ?, email = ?, role = ? WHERE id = ?",
+				new Object[] { username, hashedPassword, email, role, id });
 	}
 
 	public void deleteUser(long id) {

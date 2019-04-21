@@ -4,7 +4,7 @@ angular
 
 function signup() {
     var directive = {
-        templateUrl: '/shared/signup/signup.html',
+        templateUrl: '/shared/auth/signup.html',
         restrict: 'EA',
         controller: 'SignupCtrl',
         controllerAs: 'signupCtrl',

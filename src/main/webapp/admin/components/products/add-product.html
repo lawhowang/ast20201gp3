@@ -27,6 +27,18 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label for="quantity" class="col-sm-2 col-form-label">Quantity</label>
+                    <div class="col-sm-10">
+                        <input type="number" step="1" class="form-control" id="quantity" placeholder="Quantity (Leave it empty if no limit)"
+                            ng-model="addProductCtrl.product.quantity"
+                            ng-class="{ 'is-invalid' : addProductCtrl.errors.quantity }">
+                        <div class="invalid-feedback" ng-show="addProductCtrl.errors.quantity"
+                            ng-repeat="error in addProductCtrl.errors.quantity">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <div class="input-group mb-3">
                         <label for="description" class="col-sm-2 col-form-label">Image</label>
                         <div class="col-sm-10">

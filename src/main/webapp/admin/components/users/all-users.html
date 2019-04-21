@@ -31,7 +31,7 @@
             <tr ng-repeat="user in allUsersCtrl.users" class="fade-in-view">
                 <td class="align-middle">{{user.id}}</td>
                 <td class="align-middle">{{user.username}}</td>
-                <td class="align-middle">{{user.last_login_date | date: 'yyyy-MM-dd H:mm:ss'}}</td>
+                <td class="align-middle">{{user.last_login_date | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
                 <td class="align-middle text-right"><a href="{{ '#!users/edit-user/' + user.id }}"
                         class="btn btn-outline-primary">View/Edit</a>
                 </td>
@@ -41,7 +41,7 @@
 
     <div>
         <pagination ng-if="allUsersCtrl.loaded" curr-page="allUsersCtrl.currPage" max-pages="allUsersCtrl.maxPages"
-            href-prefix="{{allUsersCtrl.searchMode ? '#!users/all-users/search/' + allUsersCtrl.q + '/' : '#!users/all-users/'}}">
+            href-prefix="?page=">
         </pagination>
     </div>
 </div>

@@ -5,27 +5,45 @@
         .module('app')
         .controller('SignupCtrl', SignupCtrl);
 
-    SignupCtrl.$inject = ['signupService'];
+    SignupCtrl.$inject = ['authService', '$routeParams'];
 
-    function SignupCtrl(signupService) {
+    function SignupCtrl(authService, $routeParams) {
         var vm = this;
 
+        vm.init = init;
         vm.signup = signup;
         vm.errors = {};
 
+
+        function redirect() {
+            if (vm.isModal) {
+                if (!$routeParams.afterLogin)
+                    location.reload();
+                else
+                    location.href = $routeParams.afterLogin;
+            } else {
+                location.href = "/";
+            }
+        }
+        
+        function init() {
+            if (authService.isAuthenticated()) {
+                redirect();
+            }
+        }
+
         function signup() {
             if (vm.confirmPassword != vm.password) {
-                console.log("test");
                 vm.errors.confirmPassword = ["The confirm password does not match with the password"];
                 return;
             }
 
             vm.loading = true;
-            signupService.signup(vm.username, vm.password, vm.email)
+            authService.signup(vm.username, vm.password, vm.email)
                 .then(function successCallback(response) {
                     vm.loading = false;
                     console.log(response);
-                    location.reload();
+                    redirect();
                 }, function errorCallback(response) {
                     vm.loading = false;
                     console.log(response);

@@ -1,0 +1,74 @@
+<div class="container py-2">
+    <div class="row bg-light p-4 my-4" ng-if="orderCtrl.orders.length == 0">
+        <div class="text-center w-100">No order has been made yet</div>
+    </div>
+    <div class=" p-2 my-4" ng-if="orderCtrl.orders.length > 0">
+        <div class="row bg-light p-2 my-4" ng-repeat="order in orderCtrl.orders">
+            <div class="col-12">
+                <button ng-if="order.paymentStatus == 0 && order.orderStatus != -1" type="button"
+                    class="close text-danger" aria-label="Close" ng-click="orderCtrl.cancelOrder(order.id)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="mt-2">
+                    <a class="text-dark" href="{{'#!orders/' + order.id}}">
+                        Order #{{order.id}}
+                    </a>
+                </div>
+                <hr>
+                <div class="mt-2 text-secondary mb-3">
+                    <div class="row">
+                        <div class="col-6 col-lg-3">
+                            <div class="row">
+                                <div class="col-12 col-lg-6 text-center">
+                                    <i class="far fa-calendar-plus display-3" style="opacity: .2"></i>
+                                </div>
+                                <div class="col-12 col-lg-6 text-center mt-3 mt-lg-1">
+                                    <h6>Create Date</h6>
+                                    {{order.createDate | date:'yyyy-MM-dd HH:mm' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="row">
+                                <div class="col-12 col-lg-6 text-center">
+                                    <i class="fas fa-money-bill-wave display-3" style="opacity: .2"></i>
+                                </div>
+                                <div class="col-12 col-lg-6 text-center mt-3 mt-lg-1">
+                                    <h6>Payment Status</h6>
+                                    {{order.paymentStatus == 0 ? 'Unpaid' : 'Paid' }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3 mt-4 mt-lg-0">
+                            <div class="row">
+                                <div class="col-12 col-lg-6 text-center">
+                                    <i class="fas fa-box display-3" style="opacity: .2"></i>
+                                </div>
+                                <div class="col-12 col-lg-6 text-center mt-3 mt-lg-1">
+                                    <h6>Order Status</h6>
+                                    {{orderCtrl.orderStatusMessage(order.orderStatus)}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3 mt-4 mt-lg-0">
+                            <div class="row">
+                                <div class="col-12 col-lg-6 text-center">
+                                    <i class="fas fa-file-invoice-dollar display-3" style="opacity: .2"></i>
+                                </div>
+                                <div class="col-12 col-lg-6 text-center mt-3 mt-lg-1">
+                                    <h6>Invoice</h6>
+                                    <a href="{{'#!orders/' + order.id}}" class="btn btn-outline-secondary">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="my-4">
+        <pagination ng-if="orderCtrl.maxPages" curr-page="orderCtrl.currPage" max-pages="orderCtrl.maxPages"
+            href-prefix="?page=">
+        </pagination>
+    </div>
+</div>

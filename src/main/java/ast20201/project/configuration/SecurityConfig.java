@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
 
 		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/admin/**").hasAuthority("ADMIN")
-				.anyRequest().permitAll();
+				.antMatchers("/api/cart/**").authenticated().antMatchers("/api/order/**").authenticated()
+				.antMatchers("/api/credit/**").authenticated().anyRequest().permitAll();
 	}
 }

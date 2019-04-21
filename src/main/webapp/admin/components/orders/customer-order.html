@@ -1,0 +1,188 @@
+<div class="px-3 py-2 py-md-4">
+    <form ng-submit="customerOrderCtrl.submit()">
+        <div class="row">
+            <div class="col-12 col-lg-10">
+                <div class="form-group row">
+                    <label for="id" class="col-sm-2 col-form-label">ID</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="id" placeholder="ID"
+                            ng-model="customerOrderCtrl.order.id" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Customer</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="name" placeholder="Customer Name"
+                            ng-model="customerOrderCtrl.order.username" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="createDate" class="col-sm-2 col-form-label">Create Date</label>
+                    <div class="col-sm-10">
+                        <input type="text" datetime="yyyy-MM-dd HH:mm:ss" class="form-control" id="createDate"
+                            placeholder="Create Date" ng-model="customerOrderCtrl.order.createDate"
+                            ng-class="{ 'is-invalid' : customerOrderCtrl.errors.price }">
+                        <div class="invalid-feedback" ng-show="customerOrderCtrl.errors.createDate"
+                            ng-repeat="error in customerOrderCtrl.errors.createDate">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="orderProducts" class="col-sm-2 col-form-label">Order Products</label>
+                    <div class="col-sm-10">
+                        <div class="bg-light position-relative" ng-repeat="product in customerOrderCtrl.order.orderProducts">
+                            <button type="button" class="close text-danger position-absolute" aria-label="Close"
+                                ng-click="customerOrderCtrl.removeProduct(product.id)" style="right: 3px; top: 0px;z-index:99;">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <div class="row">
+                                <div class="col-12 col-lg-2 text-center">
+                                    <a href="{{'#!products/' + product.id}}">
+                                        <img ng-if="product.image" ng-src="../{{product.image}}" class="p-1"
+                                            width="64" />
+                                        <div ng-if="!product.image">No product image</div>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-lg-8">
+                                    <div class="row px-2 h-100">
+                                        <div class="col-12 col-lg-6">
+                                            <div class="mt-3 text-center text-lg-left">
+                                                <a class="text-dark" href="{{'#!products/' + product.id}}">
+                                                    {{product.name}} <span class="text-secondary"
+                                                        ng-if="product.quantity">({{product.quantity}} left in
+                                                        stock)</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-lg-6">
+                                            <div class="input-group mt-3 mb-3">
+                                                <div class="input-group-prepend">
+                                                    <button type="button" class="btn btn-primary"
+                                                        ng-class="{ 'disabled' : product.amount == 1 }"
+                                                        ng-click="customerOrderCtrl.decrease(product)"><i
+                                                            class="fas fa-minus"></i></button>
+                                                </div>
+                                                <input type="number" class="form-control inline text-center" min="1"
+                                                    placeholder="Quantity" ng-model="product.amount"
+                                                    ng-change="customerOrderCtrl.updateAmount(product, {{product.amount}})"
+                                                    oninput="this.value = Math.abs(this.value)">
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-primary"
+                                                        ng-class="{ 'disabled' : product.amount >= product.quantity && product.quantity != null }"
+                                                        ng-click="customerOrderCtrl.increase(product)"><i
+                                                            class="fas fa-plus"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-2">
+                                    <div class="mt-3 text-secondary text-lg-right text-center pr-lg-3 mr-2 mb-3 mb-lg-0">
+                                        ${{product.price * product.amount | number : 2}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-light mt-2">
+                            <div class="row">
+                                <div class="col-6 text-left">
+                                    <div class="mt-2 mb-2 text-left mx-4">
+                                        Total
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mt-2 mb-2 mx-4 text-right text-secondary">
+                                        ${{customerOrderCtrl.getTotalPrice() | number: 2}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="message" class="col-sm-2 col-form-label">Message</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="message" placeholder="Message"
+                            ng-model="customerOrderCtrl.order.message"
+                            ng-class="{ 'is-invalid' : customerOrderCtrl.errors.message }"></textarea>
+                        <div class="invalid-feedback" ng-show="customerOrderCtrl.errors.message"
+                            ng-repeat="error in customerOrderCtrl.errors.message">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="adminMessage" class="col-sm-2 col-form-label">Admin Message</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="adminMessage" placeholder="Admin Message"
+                            ng-model="customerOrderCtrl.order.adminMessage"
+                            ng-class="{ 'is-invalid' : customerOrderCtrl.errors.adminMessage }"></textarea>
+                        <div class="invalid-feedback" ng-show="customerOrderCtrl.errors.adminMessage"
+                            ng-repeat="error in customerOrderCtrl.errors.adminMessage">
+                            {{error}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-2">
+                <script type="text/ng-template" id="category-tree">
+                    <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="{{ category.id }}" ng-checked="customerOrderCtrl.categoryIndex(category) > -1" ng-click="customerOrderCtrl.toggleCategory(category)">
+                            <label class="custom-control-label" for="{{ category.id }}">{{ category.name }}</label>
+                        </div>
+                        
+                        <ul ng-if="category.children">
+                            <li ng-repeat="category in category.children" ng-include="'category-tree'">           
+                            </li>
+                        </ul>
+                    </script>
+                <h6>Payment Status</h6>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="payment-status-unpaid" name="paymentStatus" class="custom-control-input"
+                        ng-value="0" ng-model="customerOrderCtrl.order.paymentStatus">
+                    <label class="custom-control-label" for="payment-status-unpaid">Unpaid</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="payment-status-paid" name="paymentStatus" class="custom-control-input"
+                        ng-value="1" ng-model="customerOrderCtrl.order.paymentStatus">
+                    <label class="custom-control-label" for="payment-status-paid">Paid</label>
+                </div>
+                <hr>
+                <h6>Order Status</h6>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="order-status-recieved" name="orderStatus" class="custom-control-input"
+                        ng-value="0" ng-model="customerOrderCtrl.order.orderStatus">
+                    <label class="custom-control-label" for="order-status-recieved">Recieved</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="order-status-in-progress" name="orderStatus" class="custom-control-input"
+                        ng-value="1" ng-model="customerOrderCtrl.order.orderStatus">
+                    <label class="custom-control-label" for="order-status-in-progress">In progress</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="order-status-shipping" name="orderStatus" class="custom-control-input"
+                        ng-value="2" ng-model="customerOrderCtrl.order.orderStatus">
+                    <label class="custom-control-label" for="order-status-shipping">Shipping</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="order-status-completed" name="orderStatus" class="custom-control-input"
+                        ng-value="3" ng-model="customerOrderCtrl.order.orderStatus">
+                    <label class="custom-control-label" for="order-status-completed">Completed</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="order-status-cancelled" name="orderStatus" class="custom-control-input"
+                        ng-value="-1" ng-model="customerOrderCtrl.order.orderStatus">
+                    <label class="custom-control-label" for="order-status-cancelled">Cancelled</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row py-4 justify-content-center">
+            <div class="col-sm-10 text-center">
+                <div class="text-success mb-4" ng-if="customerOrderCtrl.success">Changes saved successfully</div>
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">Back</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </form>
+</div>

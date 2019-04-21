@@ -11,6 +11,7 @@ function pagination() {
             currPage: '=',
             maxPages: '=',
             hrefPrefix: '@',
+            func: '&?'
         },
         controller: 'PaginationCtrl',
         controllerAs: 'paginationCtrl',

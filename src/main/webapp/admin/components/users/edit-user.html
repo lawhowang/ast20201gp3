@@ -1,5 +1,10 @@
 <div class="px-3 py-2 py-md-4">
     <form ng-submit="editUserCtrl.submit()">
+        <div class="row">
+            <div class="col-12"><span class="text-secondary">Basic Information</span>
+                <hr>
+            </div>
+        </div>
         <div class="form-group row">
             <label for="id" class="col-sm-2 col-form-label">ID</label>
             <div class="col-sm-10">
@@ -35,10 +40,65 @@
         <div class="form-group row">
             <label for="email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="email" placeholder="Email"
+                <input type="email" class="form-control" id="email" placeholder="Email"
                     ng-model="editUserCtrl.data.email" ng-class="{ 'is-invalid' : editUserCtrl.errors.email }">
                 <div class="invalid-feedback" ng-show="editUserCtrl.errors.email"
                     ng-repeat="error in editUserCtrl.errors.email">
+                    {{error}}
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="role" class="col-sm-2 col-form-label">Role</label>
+            <div class="col-sm-10">
+                <select class="custom-select" id="role" ng-model="editUserCtrl.data.role"
+                    ng-class="{ 'is-invalid' : editUserCtrl.errors.role }">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <div class="invalid-feedback" ng-show="editUserCtrl.errors.role"
+                    ng-repeat="error in editUserCtrl.errors.role">
+                    {{error}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-3"><span class="text-secondary">Profile</span>
+                <hr>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="firstName" class="col-sm-2 col-form-label">First Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="firstName" placeholder="First Name"
+                    ng-model="editUserCtrl.data.firstName" ng-class="{ 'is-invalid' : editUserCtrl.errors.firstName }">
+                <div class="invalid-feedback" ng-show="editUserCtrl.errors.firstName"
+                    ng-repeat="error in editUserCtrl.errors.firstName">
+                    {{error}}
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="lastName" class="col-sm-2 col-form-label">Last Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="lastName" placeholder="Last Name"
+                    ng-model="editUserCtrl.data.lastName" ng-class="{ 'is-invalid' : editUserCtrl.errors.lastName }">
+                <div class="invalid-feedback" ng-show="editUserCtrl.errors.lastName"
+                    ng-repeat="error in editUserCtrl.errors.lastName">
+                    {{error}}
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="gender" class="col-sm-2 col-form-label">Gender</label>
+            <div class="col-sm-10">
+                <select class="custom-select" ng-model="editUserCtrl.data.gender"
+                    ng-class="{ 'is-invalid' : editUserCtrl.errors.gender }">
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                </select>
+                <div class="invalid-feedback" ng-show="editUserCtrl.errors.gender"
+                    ng-repeat="error in editUserCtrl.errors.gender">
                     {{error}}
                 </div>
             </div>
@@ -61,20 +121,6 @@
                     ng-model="editUserCtrl.data.address" ng-class="{ 'is-invalid' : editUserCtrl.errors.address }">
                 <div class="invalid-feedback" ng-show="editUserCtrl.errors.address"
                     ng-repeat="error in editUserCtrl.errors.address">
-                    {{error}}
-                </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="role" class="col-sm-2 col-form-label">Role</label>
-            <div class="col-sm-10">
-                <select class="custom-select" id="role" ng-model="editUserCtrl.data.role"
-                    ng-class="{ 'is-invalid' : editUserCtrl.errors.role }">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
-                <div class="invalid-feedback" ng-show="editUserCtrl.errors.role"
-                    ng-repeat="error in editUserCtrl.errors.role">
                     {{error}}
                 </div>
             </div>
@@ -102,7 +148,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="editUserCtrl.deleteUser()">Yes,
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                ng-click="editUserCtrl.deleteUser()">Yes,
                                 please delete it</button>
                         </div>
                     </div>

@@ -6,15 +6,11 @@
 package ast20201.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.DigestUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,29 +21,20 @@ import ast20201.project.model.User;
 import ast20201.project.service.UserService;
 import ast20201.project.validation.ValidationGroup;
 
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/user")
 @Controller
 public class UserController {
 
 	@Autowired
-	AuthenticationManager authenticationManager;
-
-	@Autowired
 	UserService userService;
 
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<?> getUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User user = new User();
-		try {
-			user = (User) authentication.getPrincipal();
-		} catch (Exception ex) {
-
-		}
+		User user = userService.getCurrentUser();
 		return ResponseEntity.ok(user);
 	}
 
-	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> signUp(@Validated({ ValidationGroup.SignupUser.class }) @RequestBody User user) {
 		/* Handle validation for username and email before inserting to database */
 		FieldErrorResponse errors = new FieldErrorResponse();
@@ -61,28 +48,17 @@ public class UserController {
 			return ResponseEntity.badRequest().body(errors);
 		}
 
-		// Add user to database
-		String plainPassword = user.getPassword();
-		String hashedPassword = DigestUtils.md5DigestAsHex(plainPassword.getBytes());
-		user.setPassword(hashedPassword);	// User posted password are not yet hashed, therefore hash it before inserting to db
-		user.setRole("user");	// Default role for sign up user
 		userService.addUser(user);
+		User dbUser = userService.loginUser(user);
 
-		// Authentication after registration
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(user.getUsernameOrEmail(), plainPassword));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		User dbuser = (User) authentication.getPrincipal();
-		userService.updateLastLogin(dbuser.getId());
-		return ResponseEntity.ok(dbuser);
+		return ResponseEntity.ok(dbUser);
 	}
 
-	@RequestMapping(value = "/user/signin", method = RequestMethod.POST)
-	public ResponseEntity<Object> signIn(@Validated({ ValidationGroup.SigninUser.class }) @RequestBody User signin) {
-		Authentication authentication = null;
+	@RequestMapping(value = "/signin", method = RequestMethod.POST)
+	public ResponseEntity<Object> signIn(@Validated({ ValidationGroup.SigninUser.class }) @RequestBody User user) {
+		User dbUser = null;
 		try {
-			authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(signin.getUsernameOrEmail(), signin.getPassword()));
+			dbUser = userService.loginUser(user);
 		} catch (UsernameNotFoundException ex) {
 			FieldErrorResponse errors = new FieldErrorResponse();
 			errors.addErrors("usernameOrEmail", "User not found");
@@ -92,16 +68,13 @@ public class UserController {
 			errors.addErrors("password", "Password incorrect");
 			return ResponseEntity.badRequest().body(errors);
 		}
-		
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		User dbuser = (User) authentication.getPrincipal();
-		userService.updateLastLogin(dbuser.getId());
-		return ResponseEntity.ok(dbuser);
+
+		return ResponseEntity.ok(dbUser);
 	}
 
-	@RequestMapping(value = "/user/signout", method = RequestMethod.POST)
+	@RequestMapping(value = "/signout", method = RequestMethod.POST)
 	public ResponseEntity<Object> signOut() {
-		SecurityContextHolder.getContext().setAuthentication(null);
+		userService.logoutUser();
 		return ResponseEntity.ok("{}");
 	}
 }

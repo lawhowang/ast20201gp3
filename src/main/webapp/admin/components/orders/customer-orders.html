@@ -1,0 +1,49 @@
+<div>
+        <div class="row">
+            <div class="col-12 col-md-5 col-lg-3 col-xl-3">
+                <form ng-submit="customerOrdersCtrl.submitSearch()">
+                    <div class="input-group mb-3 mt-3">
+                        <div class="input-group-prepend" ng-if="customerOrdersCtrl.searchMode">
+                            <a href='#!orders/customer-orders' class="btn btn-danger">
+                                <span aria-hidden="true">&times;</span></a>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Search by ID or Username" aria-label="ProductName"
+                            aria-describedby="basic-addon2" ng-model="customerOrdersCtrl.q">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div></div>
+        </div>
+    
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Create Date</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Payment Status</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="order in customerOrdersCtrl.orders" class="fade-in-view">
+                    <td class="align-middle">{{order.id}}</td>
+                    <td class="align-middle">{{order.username}}</td>
+                    <td class="align-middle">{{order.createDate | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
+                    <td class="align-middle">${{order.totalPrice | number: 2}}</td>
+                    <td class="align-middle" ng-class="order.paymentStatus == 0 ? 'text-danger' : 'text-success'">{{order.paymentStatus == 0 ? 'Unpaid' : 'Paid'}}</td>
+                    <td class="align-middle text-right"><a href="{{'#!/orders/customer-orders/' + order.id}}" class="btn btn-outline-primary">View</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <pagination ng-if="customerOrdersCtrl.maxPages" curr-page="customerOrdersCtrl.currPage" max-pages="customerOrdersCtrl.maxPages"
+            href-prefix="?page=">
+            </pagination>
+        </div>
+    </div>

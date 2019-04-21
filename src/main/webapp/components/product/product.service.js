@@ -9,13 +9,31 @@
 
     function productService($http) {
         var service = {
-            getProduct: getProduct
+            getProduct: getProduct,
+            getProductComments: getProductComments,
+            submitComment: submitComment
         };
 
         return service;
 
         function getProduct(id) {
             return $http.get(`/api/products/${id}`);
+        }
+
+        function getProductComments(id, page) {
+            var data = {
+                page: page
+            };
+            return $http.get(`/api/comments/${id}`, {
+                params: data
+            });
+        }
+        function submitComment(id, comment, rating) {
+            var data = {
+                comment: comment,
+                rating: rating
+            };
+            return $http.post(`/api/comments/${id}`, data);
         }
     }
 })();

@@ -5,21 +5,34 @@
         .module('app')
         .factory('authService', authService);
 
-    authService.$inject = ['$http'];
+    authService.$inject = ['$http', '$q'];
 
-    function authService($http) {
+    function authService($http, $q) {
         var service = {
+            signup: signup,
             signIn: signIn,
             signOut: signOut,
             authenticated: false,
-            user: null
+            user: null,
+            isAuthenticated: isAuthenticated,
+            isAnonymous: isAnonymous
         };
-        authenticate();
-
         return service;
 
+        function signup(username, password, email) {
+            var data = {
+                username: username,
+                password: password,
+                email: email
+            };
+            return $http.post('/api/user/', data);
+        }
+
         function signIn(usernameOrEmail, password) {
-            var data = { usernameOrEmail: usernameOrEmail, password: password };
+            var data = {
+                usernameOrEmail: usernameOrEmail,
+                password: password
+            };
             return $http.post("/api/user/signin", data);
         }
 
@@ -29,18 +42,16 @@
             return $http.post("/api/user/signout");
         }
 
-        function authenticate() {
-            $http.get("/api/user").then(function successCallback(response) {
-                console.log(response);
-                if (response.data.username) {
-                    service.authenticated = true;
-                    service.user = response.data;
-                }
-                else
-                    service.authenticate = false;
-            }, function errorCallback(response) {
-                service.authenticated = false;
-            });;
+        function isAuthenticated() {
+            if (!service.authenticated) {
+                return $q.reject("Unauthenticated");
+            }
+        }
+
+        function isAnonymous() {
+            if (service.authenticated) {
+                return $q.reject("Authenticated");
+            }
         }
     }
 })();

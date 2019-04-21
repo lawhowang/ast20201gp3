@@ -19,6 +19,7 @@
                     vm.products = response.data.items;
                     vm.currPage = response.data.currPage;
                     vm.maxPages = response.data.maxPages;
+                    vm.totalCount = response.data.totalCount;
                     console.log(response);
                 }, function errorCallback(response) {
                     console.log(response);

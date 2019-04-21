@@ -37,15 +37,14 @@
                         <a class="text-secondary">{{category.name}}</a><span ng-repeat-end ng-if="!$last">,&nbsp;</span>
                     </span>
                 </td>
-                <td class="align-middle">${{product.price}}</td>
+                <td class="align-middle">${{product.price | number: 2}}</td>
                 <td class="align-middle text-right"><a href="{{'#!/products/edit-product/' + product.id}}" class="btn btn-outline-primary">View/Edit</a>
                 </td>
             </tr>
         </tbody>
     </table>
     <div>
-        <pagination ng-if="productsCtrl.maxPages" curr-page="productsCtrl.currPage" max-pages="productsCtrl.maxPages"
-            href-prefix="{{productsCtrl.searchMode ? '#!products/products/search/' + productsCtrl.q + '/' : '#!products/products/'}}">
+        <pagination ng-if="productsCtrl.maxPages" curr-page="productsCtrl.currPage" max-pages="productsCtrl.maxPages" href-prefix="?page=">
         </pagination>
     </div>
 </div>

@@ -27,6 +27,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
     </script>
+    <script src="https://unpkg.com/angular-datetime-input"></script>
 
     <script src="app.module.js"></script>
     <script src="components/sidebar/sidebar.controller.js"></script>
@@ -49,12 +50,18 @@
     <script src="components/products/add-product.controller.js"></script>
     <script src="components/products/add-product.directive.js"></script>
 
+    <script src="components/orders/customer-orders.controller.js"></script>
+    <script src="components/orders/customer-orders.directive.js"></script>
+    <script src="components/orders/customer-order.controller.js"></script>
+    <script src="components/orders/customer-order.directive.js"></script>
+
     <script src="components/settings/site-config.controller.js"></script>
     <script src="components/settings/site-config.directive.js"></script>
 
     <script src="components/users/user.service.js"></script>
     <script src="components/products/category.service.js"></script>
     <script src="components/products/product.service.js"></script>
+    <script src="components/orders/order.service.js"></script>
     <script src="components/settings/setting.service.js"></script>
 
     <script src="shared/pagination/pagination.controller.js"></script>

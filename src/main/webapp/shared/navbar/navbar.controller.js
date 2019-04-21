@@ -25,7 +25,7 @@
                 console.log(response);
             });
 
-        vm.submitSearch = function() {
+        vm.submitSearch = function () {
             var categoryId = vm.categories[vm.selectedCategoryIndex].id;
             var name = vm.searchName;
             if (name) {

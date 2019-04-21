@@ -47,7 +47,7 @@
                     vm.success = true;
                     delete vm.errors;
                     vm.product = {};
-                    vm.product.categories = {};
+                    vm.product.categories = [];
                     delete vm.productImage;
                 }, function errorCallBack(response) {
                     console.log(response);

@@ -1,7 +1,7 @@
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
         <h1 class="display-4">Search Results</h1>
-        <p class="lead">{{searchCtrl.products.length}} products found</p>
+        <p class="lead">{{searchCtrl.totalCount}} products found</p>
     </div>
 </div>
 <div class="container category">
@@ -20,8 +20,7 @@
         </div>
     </div>
     <div class="my-4">
-        <pagination ng-if="searchCtrl.maxPages" curr-page="searchCtrl.currPage" max-pages="searchCtrl.maxPages"
-            href-prefix="{{ '#!search/' + searchCtrl.category + '/' + searchCtrl.name + '/' }}">
+        <pagination ng-if="searchCtrl.maxPages" curr-page="searchCtrl.currPage" max-pages="searchCtrl.maxPages" href-prefix="?page=">
         </pagination>
     </div>
 </div>

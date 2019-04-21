@@ -1,0 +1,39 @@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">Sign in</h1>
+        <p class="lead"></p>
+    </div>
+</div>
+<div class="container">
+    <form ng-submit="signinCtrl.signIn()" ng-init="signinCtrl.init()">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" ng-show="signinCtrl.error" ng-init="signinCtrl.error = null">
+            {{signinCtrl.error}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="form-group">
+            <label for="signIn-username-or-email">Username/Email</label>
+            <input type="text" class="form-control" id="signIn-username-or-email" name="username"
+                ng-model="signinCtrl.usernameOrEmail" placeholder="Enter username or email" required
+                ng-class="{ 'is-invalid' : signinCtrl.errors.usernameOrEmail }">
+            <div class="invalid-feedback" ng-show="signinCtrl.errors.usernameOrEmail"
+                ng-repeat="error in signinCtrl.errors.usernameOrEmail">
+                {{error}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="signIn-password">Password</label>
+            <input type="password" class="form-control" id="signIn-password" name="password"
+                ng-model="signinCtrl.password" placeholder="Enter password" required
+                ng-class="{ 'is-invalid' : signinCtrl.errors.password }">
+            <div class="invalid-feedback" ng-show="signinCtrl.errors.password"
+                ng-repeat="error in signinCtrl.errors.password">
+                {{error}}
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </div>
+    </form>
+</div>

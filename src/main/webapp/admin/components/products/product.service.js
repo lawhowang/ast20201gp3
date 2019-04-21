@@ -28,7 +28,7 @@
                     priceUpperBound: filter.priceUpperBound,
                     priceLowerBound: filter.priceLowerBound,
                     sortBy: sortBy
-                }
+                };
             } else {
                 data = {
                     page: page,

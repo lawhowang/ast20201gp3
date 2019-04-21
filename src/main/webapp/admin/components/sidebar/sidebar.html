@@ -34,6 +34,14 @@
                         Product</a></li>
             </ul>
 
+            <li data-toggle="collapse" data-target="#order" class="{ collapsed: !sidebarCtrl.isActive('/orders') }">
+                <a><i class="fas fa-cart-arrow-down"></i>Orders<span class="arrow"></span></a>
+            </li>
+            <ul class="sub-menu collapse" id="order"
+                ng-class="::{ show: sidebarCtrl.isActive('/orders') }">
+                <li ng-class="{ active: sidebarCtrl.isActive('/orders/customer-orders') }"><a
+                        href="#!orders/customer-orders">Customer Orders</a></li>
+            </ul>
 
             <li data-toggle="collapse" data-target="#setting" class="{ collapsed: !sidebarCtrl.isActive('/settings') }">
                 <a><i class="fas fa-cogs"></i>Settings<span class="arrow"></span></a>
