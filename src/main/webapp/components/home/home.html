@@ -1,27 +1,20 @@
-<div class="container-fluid">
-    <div class="row flex-xl-nowrap">
-        <div class="col-12 col-md-4 col-xl-2 py-3 py-md-3">
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-4 col-xl-3 py-3 py-md-3">
             <category-list></category-list>
         </div>
-        <div class="col-12 col-md-8 col-xl-10 py-md-3">
+        <div class="col-12 col-md-8 col-xl-9 py-md-3">
             <div id="carousel" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                    <li data-target="#carouselExampleIndicators" ng-repeat="slide in homeCtrl.slides track by $index"
+                        data-slide-to="{{$index}}" ng-class="{ 'active': $index == 0}"></li>
                 </ol>
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="https://cdn.wallpaperdirect.com/shared-assets/images/products/128087full.jpg"
-                            class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://i.pinimg.com/originals/bd/42/a3/bd42a3044f1acbe00b0145b3cc374c5b.jpg"
-                            class="d-block w-100" alt="...">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="https://cdn.wallpaperdirect.com/shared-assets/images/products/115814full.jpg"
-                            class="d-block w-100" alt="...">
+                    <div class="carousel-item" ng-repeat="slide in homeCtrl.slides track by $index"
+                        ng-class="{ 'active': $index == 0}">
+                        <a href="{{slide.url}}">
+                            <img ng-src="{{slide.imageUrl}}" class="d-block h-25">
+                        </a>
                     </div>
                 </div>
                 <span class="carousel-control-prev" data-target="#carousel" data-slide="prev">
@@ -35,5 +28,46 @@
             </div>
         </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-12">
+            <h4 class="text-secondary">Latest Arrivals</h4>
+            <hr>
+            <div id="carousel-latest-products" class="carousel slide carousel-latest-products" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators"
+                        ng-repeat="group in homeCtrl.latestProducts track by $index" data-slide-to="{{$index}}"
+                        ng-class="{ 'active': $index == 0}"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item" ng-repeat="group in homeCtrl.latestProducts track by $index"
+                        ng-class="{ 'active': $index == 0}">
+                        <div class="row" style="padding: 0 5%">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3" ng-repeat="product in group">
+                                <div class="card product shadow-sm">
+                                    <a href="{{'#!products/' + product.id}}">
+                                        <img class="card-img-top" ng-src="{{product.image}}" ng-if="product.image"
+                                            alt="Card image cap">
+                                    </a>
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title font-weight-normal">{{product.name}}</h5>
+                                        <h5 class="card-text text-secondary font-weight-normal">${{product.price}}</h5>
+                                        <a href="{{'#!products/' + product.id}}" class="btn btn-outline-primary">View
+                                            Product</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="carousel-control-prev" data-target="#carousel-latest-products" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </span>
+                <span class="carousel-control-next" data-target="#carousel-latest-products" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </span>
+            </div>
+        </div>
+    </div>
 </div>

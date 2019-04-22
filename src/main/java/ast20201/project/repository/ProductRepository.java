@@ -228,4 +228,24 @@ public class ProductRepository {
                 });
         return categories;
     }
+
+	public List<Product> getLatestProducts() {
+		List<Product> products = jdbcTemplate.query("SELECT * FROM product WHERE deleted = 0 ORDER BY id LIMIT 0, 12", (ResultSet rs) -> {
+            List<Product> result = new ArrayList<Product>();
+            while (rs.next()) {
+                long id = rs.getLong("id");
+                String name = rs.getString("name");
+                BigDecimal price = rs.getBigDecimal("price");
+                Integer quantity = (Integer) rs.getObject("quantity");
+                String description = rs.getString("description");
+                String image = rs.getString("image");
+
+                List<Category> categories = getProductCategories(id);
+
+                result.add(new Product(id, name, price, quantity, description, categories, image));
+            }
+            return result;
+        });
+        return products;
+	}
 }

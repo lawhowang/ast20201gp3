@@ -1,6 +1,6 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
-<html ng-app="app">
+<html ng-app="app" class="h-100">
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -91,7 +91,7 @@
 <security:authorize access="!hasAnyAuthority('USER', 'ADMIN')">
   <security:authentication var="principal" property="principal" />
 
-  <body ng-cloak>
+  <body ng-cloak class="d-flex flex-column h-100">
 </security:authorize>
 <security:authorize access="hasAuthority('ADMIN')">
   <navbar site-title="{{siteTitle}}" is-admin="true" admin-portal="admin"></navbar>
@@ -100,6 +100,11 @@
   <navbar site-title="{{siteTitle}}"></navbar>
 </security:authorize>
 <div ng-view></div>
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+      <span class="text-muted">{{siteTitle}} 2019</span>
+    </div>
+  </footer>
 </body>
 
 </html>

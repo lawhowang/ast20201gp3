@@ -126,9 +126,10 @@
     app.run(['$rootScope', 'settingService', '$location', function ($rootScope, settingService, $location) {
         $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
             $rootScope.title = current.$$route.title;
-            settingService.getSiteTitle()
+            settingService.getSiteConfig()
                 .then(function successCallback(response) {
-                    $rootScope.siteTitle = response.data.val;
+                    console.log(response);
+                    $rootScope.siteTitle = response.data.config['Site Title'];
                 });
         });
         $rootScope.$on("$routeChangeError", function (event, current, previous, rejection) {

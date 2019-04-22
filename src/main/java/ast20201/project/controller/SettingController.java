@@ -18,7 +18,13 @@ public class SettingController {
 
 	@RequestMapping(value = "/site-title", method = RequestMethod.GET)
 	public ResponseEntity<?> getSiteTitle() {
-		SiteConfig siteTitle = settingService.getSiteConfig().get(0);
-		return ResponseEntity.ok(siteTitle);
+		String siteTitle = settingService.getSiteConfig().getConfig().get("Site Title");
+		return ResponseEntity.ok("{ \"siteTitle\": \"" + siteTitle + "\" }");
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<?> getSiteConfig() {
+		SiteConfig configs = settingService.getSiteConfig();
+		return ResponseEntity.ok(configs);
 	}
 }

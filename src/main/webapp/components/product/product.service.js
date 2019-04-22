@@ -11,7 +11,8 @@
         var service = {
             getProduct: getProduct,
             getProductComments: getProductComments,
-            submitComment: submitComment
+            submitComment: submitComment,
+            getLatestProducts: getLatestProducts
         };
 
         return service;
@@ -34,6 +35,9 @@
                 rating: rating
             };
             return $http.post(`/api/comments/${id}`, data);
+        }
+        function getLatestProducts() {
+            return $http.get(`/api/products/latest`);
         }
     }
 })();

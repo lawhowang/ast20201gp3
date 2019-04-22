@@ -272,13 +272,13 @@ public class AdminController {
 
 	@RequestMapping(value = "/settings/site-config", method = RequestMethod.GET)
 	public ResponseEntity<?> getSiteConfig() {
-		List<SiteConfig> configs = settingService.getSiteConfig();
+		SiteConfig configs = settingService.getSiteConfig();
 		return ResponseEntity.ok(configs);
 	}
 
 	@RequestMapping(value = "/settings/site-config", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateSiteConfigs(@RequestBody List<SiteConfig> configs) {
-		settingService.updateSiteConfig(configs);
+	public ResponseEntity<?> updateSiteConfigs(@RequestBody SiteConfig config) {
+		settingService.updateSiteConfig(config);
 		return ResponseEntity.ok("{}");
 	}
 

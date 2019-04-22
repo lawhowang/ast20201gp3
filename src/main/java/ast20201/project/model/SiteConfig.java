@@ -1,44 +1,29 @@
 package ast20201.project.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class SiteConfig {
-    private long id;
-    private String key;
-    private String val;
+    
+    private Map<String, String> config = new HashMap<String, String>();
 
     public SiteConfig() {
 
     }
     
-    public SiteConfig(long id, String key, String val) {
-        this.id = id;
-        this.key = key;
-        this.val = val;
+    public SiteConfig(Map<String, String> config) {
+        this.config = config;
     }
 
-    public long getId() {
-        return id;
+    public Map<String, String> getConfig() {
+        return config;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setConfig(Map<String, String> config) {
+        this.config = config;
     }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getVal() {
-        return val;
-    }
-
-    public void setVal(String val) {
-        this.val = val;
-    }
+   
 }

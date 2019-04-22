@@ -10,7 +10,8 @@
     function settingService($http) {
         var service = {
             getSiteConfig: getSiteConfig,
-            updateSiteConfig: updateSiteConfig
+            updateSiteConfig: updateSiteConfig,
+            getSiteTitle: getSiteTitle
         };
 
         return service;
@@ -20,8 +21,14 @@
         }
 
         function updateSiteConfig(config) {
-            return $http.put("/admin/api/settings/site-config", config);
+
+            return $http.put("/admin/api/settings/site-config", {
+                config: config
+            });
         }
 
+        function getSiteTitle() {
+            return $http.get('/api/setting/site-title');
+        }
     }
 })();

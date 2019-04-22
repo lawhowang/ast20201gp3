@@ -46,4 +46,8 @@ public class ProductService {
     public void updateProductImage(long id, String image) {
         productRepository.updateProductImage(id, image);
     }
+
+	public List<Product> getLatestProducts() {
+		return productRepository.getLatestProducts();
+	}
 }

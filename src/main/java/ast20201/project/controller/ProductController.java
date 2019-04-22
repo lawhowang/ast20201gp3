@@ -1,5 +1,7 @@
 package ast20201.project.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,12 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @RequestMapping(value = "/products/latest", method = RequestMethod.GET)
+    public @ResponseBody ResponseEntity<?> getLatestProducts() {
+        List<Product> products = productService.getLatestProducts();
+        return ResponseEntity.ok(products);
+    }
 
     @RequestMapping(value = "/products/{id}", method = RequestMethod.GET)
     public @ResponseBody ResponseEntity<?> getProduct(@PathVariable("id") long id) {

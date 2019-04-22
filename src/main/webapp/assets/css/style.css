@@ -141,3 +141,21 @@ input[type=number]::-webkit-outer-spin-button {
 .category-tree ul ul li a {
     padding-left: 25px !important;
 }
+
+.carousel-latest-products .carousel-control-prev,
+.carousel-latest-products .carousel-control-next {
+    opacity: 0;
+    width: 5%;
+    background: rgba(0, 0, 0, .2);
+    transition: all .25s ease;
+}
+
+.carousel-latest-products:hover .carousel-control-prev,
+.carousel-latest-products:hover .carousel-control-next {
+    opacity: 1;
+}
+
+footer {
+
+
+}

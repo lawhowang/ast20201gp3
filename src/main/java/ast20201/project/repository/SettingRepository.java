@@ -1,9 +1,10 @@
 package ast20201.project.repository;
 
-import java.util.List;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -14,21 +15,26 @@ public class SettingRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<SiteConfig> getSiteConfig() {
-        List<SiteConfig> configs = jdbcTemplate.query("SELECT * FROM config",
-                new BeanPropertyRowMapper<SiteConfig>(SiteConfig.class));
+    public SiteConfig getSiteConfig() {
+        SiteConfig configs = jdbcTemplate.query("SELECT * FROM config", (ResultSet rs) -> {
+            Map<String, String> map = new HashMap<>();
+            while (rs.next()) {
+                String key = rs.getString("key");
+                String val = rs.getString("val");
+                map.put(key, val);
+            }
+            SiteConfig config = new SiteConfig(map);
+            return config;
+        });
         return configs;
     }
 
-    public void updateSiteConfig(List<SiteConfig> configs) {
-        try {
-            for (SiteConfig config : configs) {
-                System.out.println(config.getId());
-                jdbcTemplate.update("UPDATE config SET val = ? WHERE id = ?",
-                        new Object[] { config.getVal(), config.getId() });
-            }
-        } catch (Exception ex) {
-
+    public void updateSiteConfig(SiteConfig config) {
+        System.out.println("en");
+        for (Map.Entry<String, String> entry : config.getConfig().entrySet()) {
+            System.out.println(entry.getValue());
+            jdbcTemplate.update("UPDATE config SET val = ? WHERE `key` = ?",
+                    new Object[] { entry.getValue(), entry.getKey() });
         }
     }
 }
