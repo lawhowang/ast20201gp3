@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import ast20201.project.exception.InsufficientCreditsException;
 import ast20201.project.exception.InsufficientStockException;
+import ast20201.project.exception.OrderCancelledException;
+import ast20201.project.exception.OrderPaidException;
 import ast20201.project.model.FieldErrorResponse;
 import ast20201.project.model.Order;
 import ast20201.project.model.OrderProduct;
@@ -74,6 +76,14 @@ public class OrderController {
         } catch (InsufficientCreditsException ex) {
             FieldErrorResponse errors = new FieldErrorResponse();
             errors.addErrors("credits", ex.getMessage());
+            return ResponseEntity.badRequest().body(errors);
+        } catch (OrderCancelledException ex) {
+            FieldErrorResponse errors = new FieldErrorResponse();
+            errors.addErrors("order", ex.getMessage());
+            return ResponseEntity.badRequest().body(errors);
+        } catch (OrderPaidException ex) {
+            FieldErrorResponse errors = new FieldErrorResponse();
+            errors.addErrors("order", ex.getMessage());
             return ResponseEntity.badRequest().body(errors);
         }
         return new ResponseEntity<>(HttpStatus.OK);

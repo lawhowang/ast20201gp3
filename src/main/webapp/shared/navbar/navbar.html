@@ -8,32 +8,31 @@
     <div class="collapse navbar-collapse col-auto col-lg-8" id="navbarSupportedContent">
         <div class="col-auto col-lg-6">
             <div class="mr-auto ml-auto position-relative" ng-mouseenter="navbarCtrl.searchEnter = true"
-                ng-mouseleave="navbarCtrl.searchEnter = false">
-                <form ng-submit="navbarCtrl.submitSearch();navbarCtrl.searchName = null">
+                ng-mouseleave="navbarCtrl.searchEnter = false; navbarCtrl.cancelSearch();">
+                <form ng-submit="navbarCtrl.submitSearch(); navbarCtrl.searchName = null">
                     <div class="input-group mt-2 mt-lg-0">
                         <div class="input-group-prepend">
                             <button class="btn btn-outline-secondary dropdown-toggle" type="button"
                                 data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">{{ navbarCtrl.categories[navbarCtrl.selectedCategoryIndex].name }}</button>
+                                aria-expanded="false">{{ navbarCtrl.selectedCategoryText }}</button>
                             <div class="dropdown-menu category-tree">
                                 <script type="text/ng-template" id="dropdown-category-tree">
-                                    <a class="text-secondary">{{ category.name }}</a>
+                                    <a class="text-secondary" ng-click="navbarCtrl.selectCategory(category.id, category.name)">{{ category.name }}</a>
                             <ul ng-if="category.children">
-                                <li ng-repeat="category in category.children" ng-include="'dropdown-category-tree'">           
+                                <li ng-repeat="category in category.children" ng-include="'dropdown-category-tree'" >           
                                 </li>
                             </ul>
                         </script>
                                 <ul class="list-group">
                                     <li class="list-group-item" ng-repeat="category in navbarCtrl.categories"
-                                        ng-include="'dropdown-category-tree'"
-                                        ng-click="navbarCtrl.selectedCategoryIndex = $index; navbarCtrl.searchProduct()">
+                                        ng-include="'dropdown-category-tree'">
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <input type="text" class="form-control" aria-label="Search" placeholder="Search products"
+                        <input id="search-text" type="text" class="form-control" aria-label="Search" placeholder="Search products"
                             ng-model="navbarCtrl.searchName" ng-change="navbarCtrl.searchProduct()"
-                            ng-blur="navbarCtrl.cancelSearch()">
+                            ng-blur="navbarCtrl.searchFocus = false; navbarCtrl.cancelSearch()" ng-focus="navbarCtrl.searchFocus = true">
                     </div>
                 </form>
                 <div class="position-absolute bg-white w-100 shadow ajax-search-result" style="z-index: 99"

@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ast20201.project.exception.InsufficientCreditsException;
 import ast20201.project.exception.InsufficientStockException;
+import ast20201.project.exception.OrderCancelledException;
+import ast20201.project.exception.OrderPaidException;
 import ast20201.project.model.Order;
 import ast20201.project.model.OrderProduct;
 import ast20201.project.model.PageData;
@@ -72,14 +74,20 @@ public class OrderService {
         return getOrder(id);
 	}
 
-	public void confirmOrder(long userId, long orderId) throws InsufficientCreditsException {
+	public void confirmOrder(long userId, long orderId) throws InsufficientCreditsException, OrderCancelledException, OrderPaidException {
         BigDecimal totalPrice = orderRepository.getOrderTotalPrice(orderId);
         BigDecimal userCredits = userRepository.getUser(userId).getCredits();
         if (totalPrice.compareTo(userCredits) > 0) {
-            throw new InsufficientCreditsException("Insufficient Credits!");
+            throw new InsufficientCreditsException("Insufficient credits. Please recharge the credits.");
         }
         userRepository.reduceCredits(userId, totalPrice);
         Order order = getOrder(orderId);
+        if (order.getOrderStatus() == -1) {
+            throw new OrderCancelledException("Payment has been declined as the order has been cancelled");
+        }
+        if (order.getPaymentStatus() == 1) {
+            throw new OrderPaidException("Payment has been declined as the order has been paid");
+        }
         orderRepository.updateOrder(order.getId(), order.getOrderProducts(), order.getOrderStatus(), 1, order.getCreateDate(), order.getMessage(), order.getAdminMessage());
 	}
 

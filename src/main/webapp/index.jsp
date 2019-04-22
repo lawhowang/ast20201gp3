@@ -86,7 +86,7 @@
   <security:authentication var="principal" property="principal" />
 
   <body ng-cloak ng-controller="AppCtrl"
-    ng-init="init('${principal.username}', '${principal.email}', '${principal.role}', ${principal.credits})">
+    ng-init="init('${principal.username}', '${principal.email}', '${principal.role}')">
 </security:authorize>
 <security:authorize access="!hasAnyAuthority('USER', 'ADMIN')">
   <security:authentication var="principal" property="principal" />

@@ -8,15 +8,14 @@
     AppCtrl.$inject = ['$scope', 'authService'];
 
     function AppCtrl($scope, authService) {
-        $scope.init = function (username, email, phone, address, role, credits) {
+        $scope.init = function (username, email, phone, address, role) {
             authService.authenticated = true;
             authService.user = {
                 username: username,
                 email: email,
                 phone: phone,
                 address: address,
-                role: role,
-                credits: credits
+                role: role
             };
         };
     }

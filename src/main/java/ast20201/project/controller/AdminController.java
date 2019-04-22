@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.ContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 
 import ast20201.project.model.User;
@@ -118,7 +117,9 @@ public class AdminController {
 		}
 		dbuser.setEmail(user.getEmail());
 		dbuser.setRole(user.getRole());
+		dbuser.setCredits(user.getCredits());
 		userService.updateUser(dbuser);
+
 		profileService.updateProfile(user.getId(), user);
 		UserWithProfile dbuserWithProfile = profileService.getProflie(user.getId());
 		return ResponseEntity.ok(dbuserWithProfile);

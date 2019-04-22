@@ -30,7 +30,20 @@
             if (vm.q)
                 $location.path('/orders/customer-orders/search/' + vm.q);
         };
-
+        vm.orderStatusMessage = function (orderStatus) {
+            switch (orderStatus) {
+                case -1:
+                    return 'Cancelled';
+                case 0:
+                    return 'Recieved';
+                case 1:
+                    return 'Proccessing';
+                case 2:
+                    return 'Shipping';
+                case 3:
+                    return 'Completed';
+            }
+        };
         vm.getUserName = function (order, i) {
             userService.getUser(order[i].userId).then(
                 function successCallback(response) {

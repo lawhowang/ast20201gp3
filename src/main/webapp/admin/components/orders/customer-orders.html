@@ -25,7 +25,7 @@
                     <th scope="col">User</th>
                     <th scope="col">Create Date</th>
                     <th scope="col">Price</th>
-                    <th scope="col">Payment Status</th>
+                    <th scope="col">Status</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -35,7 +35,7 @@
                     <td class="align-middle">{{order.username}}</td>
                     <td class="align-middle">{{order.createDate | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
                     <td class="align-middle">${{order.totalPrice | number: 2}}</td>
-                    <td class="align-middle" ng-class="order.paymentStatus == 0 ? 'text-danger' : 'text-success'">{{order.paymentStatus == 0 ? 'Unpaid' : 'Paid'}}</td>
+                    <td class="align-middle" ng-class="order.paymentStatus == 0 ? 'text-danger' : 'text-success'">{{order.paymentStatus == 0 ? 'Unpaid' : 'Paid'}} / {{customerOrdersCtrl.orderStatusMessage(order.orderStatus)}}</td>
                     <td class="align-middle text-right"><a href="{{'#!/orders/customer-orders/' + order.id}}" class="btn btn-outline-primary">View</a>
                     </td>
                 </tr>

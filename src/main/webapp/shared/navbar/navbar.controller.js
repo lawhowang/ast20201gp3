@@ -10,7 +10,6 @@
     function NavbarCtrl(authService, categoryListService, searchService, $location, $routeParams) {
         var vm = this;
         vm.authService = authService;
-        vm.selectedCategoryIndex = 0;
         vm.searchName = $routeParams.name ? $routeParams.name : '';
         categoryListService.getCategories()
             .then(function successCallback(response) {
@@ -25,8 +24,11 @@
                 console.log(response);
             });
 
+        vm.selectedCategoryId = 0;
+        vm.selectedCategoryText = "All";
+
         vm.submitSearch = function () {
-            var categoryId = vm.categories[vm.selectedCategoryIndex].id;
+            var categoryId = vm.selectedCategoryId;
             var name = vm.searchName;
             if (name) {
                 $location.path(`/search/${categoryId}/${name}`);
@@ -40,8 +42,7 @@
                 return;
             }
             vm.searching = true;
-            var categoryId = vm.categories[vm.selectedCategoryIndex].id;
-            searchService.searchProduct(vm.searchName, categoryId, 1)
+            searchService.searchProduct(vm.searchName, vm.selectedCategoryId, 1)
                 .then(function sucessCallback(response) {
                     console.log(response);
                     vm.searchProducts = response.data.items.slice(0, 5);
@@ -53,9 +54,16 @@
         };
 
         vm.cancelSearch = function () {
-            if (vm.searchEnter) return;
+            if (vm.searchEnter || vm.searchFocus || vm.searching) return;
             delete vm.searchName;
             delete vm.searchProducts;
+        };
+
+        vm.selectCategory = function (catId, catName) {
+            angular.element('#search-text').trigger('focus');
+            vm.selectedCategoryId = catId;
+            vm.selectedCategoryText = catName;
+            vm.searchProduct();
         };
     }
 })();
