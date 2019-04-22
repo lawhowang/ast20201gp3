@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import ast20201.project.model.Comment;
 import ast20201.project.model.PageData;
 
 @Repository
-@Transactional(rollbackFor = Exception.class)
 public class CommentRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;

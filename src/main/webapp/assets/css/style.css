@@ -118,3 +118,16 @@ input[type=number]::-webkit-outer-spin-button {
 .btn-outline-warning:hover, .btn-outline-warning:active {
 	color: #fff !important;
 }
+
+.ajax-search-result a {
+    display: block;
+    text-decoration: none;
+    transition: all .25s ease;
+}
+.ajax-search-result a:hover {
+    background: #eeeeee;
+}
+
+.category-tree ul ul li a {
+    padding-left: 25px !important;
+}

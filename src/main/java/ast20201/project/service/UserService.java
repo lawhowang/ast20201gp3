@@ -1,5 +1,6 @@
 package ast20201.project.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,10 +87,11 @@ public class UserService {
 	
 	public void updateUser(User dbuser) {
 		userRepository.updateUser(dbuser.getId(), dbuser.getUsername(), dbuser.getPassword(), dbuser.getEmail(),
-				dbuser.getRole());
+				dbuser.getRole(), dbuser.getCredits());
 	}
 
 	public void deleteUser(long id) {
 		userRepository.deleteUser(id);
 	}
+
 }

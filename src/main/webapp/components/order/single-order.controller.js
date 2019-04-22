@@ -104,5 +104,18 @@
                     return 'Paid';
             }
         };
+
+        vm.confirm = function() {
+            orderService.confirmOrder(vm.orderId).then(
+                function successCallback(response) {
+                    console.log(response);
+                    delete vm.errors;
+                    location.reload(); 
+                },
+                function errorCallback(response) {
+                    console.log(response);
+                    vm.errors = response.data.errors;
+                });
+        };
     }
 })();

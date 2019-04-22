@@ -12,7 +12,8 @@
             getOrders: getOrders,
             getOrder: getOrder,
             createOrder: createOrder,
-            cancelOrder: cancelOrder
+            cancelOrder: cancelOrder,
+            confirmOrder: confirmOrder
         };
 
         return service;
@@ -40,6 +41,10 @@
 
         function cancelOrder(orderId) {
             return $http.delete(`/api/order/${orderId}`);
+        }
+
+        function confirmOrder(orderId) {
+            return $http.put(`/api/order/${orderId}`);
         }
     }
 })();

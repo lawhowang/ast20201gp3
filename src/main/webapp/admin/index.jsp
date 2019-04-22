@@ -67,6 +67,8 @@
     <script src="shared/pagination/pagination.controller.js"></script>
     <script src="shared/pagination/pagination.directive.js"></script>
     <script src="shared/upload/upload.directive.js"></script>
+
+    <script src="shared/search/search.service.js"></script>
 </head>
 
 <body ng-cloak>

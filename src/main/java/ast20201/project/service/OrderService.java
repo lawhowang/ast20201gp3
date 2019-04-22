@@ -1,20 +1,24 @@
 package ast20201.project.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import ast20201.project.exception.InsufficientCreditsException;
 import ast20201.project.exception.InsufficientStockException;
-import ast20201.project.model.FieldErrorResponse;
 import ast20201.project.model.Order;
 import ast20201.project.model.OrderProduct;
 import ast20201.project.model.PageData;
 import ast20201.project.model.Product;
 import ast20201.project.repository.OrderRepository;
 import ast20201.project.repository.ProductRepository;
+import ast20201.project.repository.UserRepository;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class OrderService {
 
     @Autowired
@@ -22,6 +26,9 @@ public class OrderService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     public PageData<Order> getOrders(String query, int page) {
         return orderRepository.getOrders(query, page);
@@ -63,6 +70,17 @@ public class OrderService {
 	public Order updateOrder(long id, Order order) {
         orderRepository.updateOrder(id, order.getOrderProducts(), order.getOrderStatus(), order.getPaymentStatus(), order.getCreateDate(), order.getMessage(), order.getAdminMessage());
         return getOrder(id);
+	}
+
+	public void confirmOrder(long userId, long orderId) throws InsufficientCreditsException {
+        BigDecimal totalPrice = orderRepository.getOrderTotalPrice(orderId);
+        BigDecimal userCredits = userRepository.getUser(userId).getCredits();
+        if (totalPrice.compareTo(userCredits) > 0) {
+            throw new InsufficientCreditsException("Insufficient Credits!");
+        }
+        userRepository.reduceCredits(userId, totalPrice);
+        Order order = getOrder(orderId);
+        orderRepository.updateOrder(order.getId(), order.getOrderProducts(), order.getOrderStatus(), 1, order.getCreateDate(), order.getMessage(), order.getAdminMessage());
 	}
 
 }

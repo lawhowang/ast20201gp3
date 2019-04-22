@@ -17,14 +17,12 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import ast20201.project.model.Order;
 import ast20201.project.model.OrderProduct;
 import ast20201.project.model.PageData;
 
 @Repository
-@Transactional(rollbackFor = Exception.class)
 public class OrderRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -112,6 +110,18 @@ public class OrderRepository {
                 new Object[] { userId, orderId });
     }
 
+    public BigDecimal getOrderTotalPrice(long orderId) {
+        BigDecimal price = jdbcTemplate.queryForObject("SELECT SUM(price * amount) FROM order_product WHERE order_id = ?",
+                new Object[] { orderId }, BigDecimal.class);
+        return price;
+    }
+
+    public boolean hasOrderProduct(long orderId, long productId) {
+        int count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM order_product WHERE order_id = ? AND product_id = ?",
+                new Object[] { orderId, productId }, Integer.class);
+        return count >= 1;
+    }
+
     public void updateOrder(long id, List<OrderProduct> orderProducts, int orderStatus, int paymentStatus,
             Timestamp createDate, String message, String adminMessage) {
         // Delete order product
@@ -124,8 +134,17 @@ public class OrderRepository {
 
         // Update amount
         for (OrderProduct orderProduct : orderProducts) {
-            jdbcTemplate.update("UPDATE order_product SET amount = ? WHERE order_id = ? AND product_id = ?",
-                    new Object[] { orderProduct.getAmount(), id, orderProduct.getId() });
+            if (hasOrderProduct(id, orderProduct.getId())) {
+                jdbcTemplate.update("UPDATE order_product SET amount = ? WHERE order_id = ? AND product_id = ?",
+                        new Object[] { orderProduct.getAmount(), id, orderProduct.getId() });
+            } else {
+                BigDecimal price = BigDecimal.ZERO;
+                price = jdbcTemplate.queryForObject("SELECT price FROM product WHERE id = ?",
+                new Object[] { orderProduct.getId() }, BigDecimal.class);
+
+                jdbcTemplate.update("INSERT INTO order_product (order_id, product_id, amount, price) VALUES (?, ?, ?, ?)",
+                new Object[] { id, orderProduct.getId(), orderProduct.getAmount(), price });
+            }
         }
 
         jdbcTemplate.update(

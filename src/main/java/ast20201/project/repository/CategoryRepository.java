@@ -59,14 +59,30 @@ public class CategoryRepository {
 		updateCategories(0, categoryList, 0);
 	}
 
+	private void getAllCatIds(List<Long> ids, List<Category> categories) {
+		for (Category category : categories) {
+			ids.add(category.getId());
+			if (category.getChildren().size() > 0) {
+				getAllCatIds(ids, category.getChildren());
+			}
+		}
+	}
+
 	// Recursive function
 	private void updateCategories(long parentId, List<Category> categories, int level) {
 		// Delete categories
-		String ids = categories.stream().map(cat -> String.valueOf(cat.getId())).collect(Collectors.joining(","));
-		if (ids != null && ids.length() > 0)
-			jdbcTemplate.update("DELETE FROM category WHERE id NOT IN( " + ids + ")");
-		else
-			jdbcTemplate.update("DELETE FROM category");
+		List<Long> ids = new ArrayList<>();
+		if (level == 0) {
+			getAllCatIds(ids, categories);
+			String _ids = ids.stream().map(catId -> String.valueOf(catId)).collect(Collectors.joining(","));
+			if (_ids != null && _ids.length() > 0)
+				jdbcTemplate.update(
+						"DELETE FROM category WHERE id NOT IN( " + _ids + ") AND parent_id = ? AND level = ?",
+						new Object[] { parentId, level });
+			else
+				jdbcTemplate.update("DELETE FROM category WHERE parent_id = ? AND level = ?",
+						new Object[] { parentId, level });
+		}
 
 		int priority = 0;
 		for (Category subCategory : categories) {
@@ -83,9 +99,14 @@ public class CategoryRepository {
 		}
 	}
 
-	public Category getCategory(long id) {
-		Category category = jdbcTemplate.queryForObject("SELECT * FROM category WHERE id = ?", new Object[] { id },
+	public Category getCategory(long catId) {
+		Category category = jdbcTemplate.queryForObject("SELECT * FROM category WHERE id = ?", new Object[] { catId },
 				new BeanPropertyRowMapper<Category>(Category.class));
+
+		List<Category> children = jdbcTemplate.query("SELECT * FROM category WHERE parent_id = ?",
+				new Object[] { catId }, new BeanPropertyRowMapper<Category>(Category.class));
+				
+		category.setChildren(children);
 		return category;
 	}
 }

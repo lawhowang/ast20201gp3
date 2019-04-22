@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ast20201.project.exception.InsufficientCreditsException;
 import ast20201.project.exception.InsufficientStockException;
 import ast20201.project.model.FieldErrorResponse;
 import ast20201.project.model.Order;
@@ -62,6 +63,19 @@ public class OrderController {
     public ResponseEntity<?> cancelOrder(@PathVariable("orderId") long orderId) {
         User user = userService.getCurrentUser();
         orderService.cancelOrder(user.getId(), orderId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{orderId}", method = RequestMethod.PUT)
+    public ResponseEntity<?> confirmOrder(@PathVariable("orderId") long orderId) {
+        User user = userService.getCurrentUser();
+        try {
+            orderService.confirmOrder(user.getId(), orderId);
+        } catch (InsufficientCreditsException ex) {
+            FieldErrorResponse errors = new FieldErrorResponse();
+            errors.addErrors("credits", ex.getMessage());
+            return ResponseEntity.badRequest().body(errors);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

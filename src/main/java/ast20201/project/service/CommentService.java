@@ -2,12 +2,14 @@ package ast20201.project.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ast20201.project.model.Comment;
 import ast20201.project.model.PageData;
 import ast20201.project.repository.CommentRepository;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class CommentService {
 
 	@Autowired

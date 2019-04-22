@@ -1,31 +1,13 @@
 package ast20201.project.repository;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import ast20201.project.model.Order;
-import ast20201.project.model.OrderProduct;
-import ast20201.project.model.PageData;
 import ast20201.project.model.UserWithProfile;
 
 @Repository
-@Transactional(rollbackFor = Exception.class)
 public class ProfileRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;

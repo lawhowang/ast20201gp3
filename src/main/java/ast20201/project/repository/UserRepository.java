@@ -1,5 +1,6 @@
 package ast20201.project.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +79,17 @@ public class UserRepository {
 		return getUserById(id);
 	}
 
-	public void updateUser(long id, String username, String hashedPassword, String email, String role) {
-		jdbcTemplate.update("UPDATE User SET username = ?, password = ?, email = ?, role = ? WHERE id = ?",
-				new Object[] { username, hashedPassword, email, role, id });
+	public void updateUser(long id, String username, String hashedPassword, String email, String role, BigDecimal credits) {
+		jdbcTemplate.update("UPDATE User SET username = ?, password = ?, email = ?, role = ?, credits = ? WHERE id = ?",
+				new Object[] { username, hashedPassword, email, role, credits, id });
 	}
 
 	public void deleteUser(long id) {
 		jdbcTemplate.update("DELETE FROM User WHERE id = ?", new Object[] { id });
+	}
+	
+	public void reduceCredits(long id, BigDecimal credits) {
+		jdbcTemplate.update("UPDATE User SET credits = credits - ? WHERE id = ?",
+				new Object[] { credits, id });
 	}
 }
