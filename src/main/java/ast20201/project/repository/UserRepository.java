@@ -20,25 +20,25 @@ public class UserRepository {
 	public void addUser(String username, String password, String email, String role) {
 		String hashedPassword = DigestUtils.md5DigestAsHex(password.getBytes());
 		jdbcTemplate.update(
-				"INSERT INTO User (username, password, email, role, create_date)" + "VALUES (?, ?, ?, ?, NOW())",
+				"INSERT INTO user (username, password, email, role, create_date)" + "VALUES (?, ?, ?, ?, NOW())",
 				username, hashedPassword, email, role);
 	}
 
 	public boolean checkUsernameDuplicated(String username) {
-		int count = jdbcTemplate.queryForObject("SELECT count(*) FROM User WHERE username = ?",
+		int count = jdbcTemplate.queryForObject("SELECT count(*) FROM user WHERE username = ?",
 				new Object[] { username }, Integer.class);
 		return count >= 1;
 	}
 
 	public boolean checkEmailDuplicated(String email) {
-		int count = jdbcTemplate.queryForObject("SELECT count(*) FROM User WHERE email = ?", new Object[] { email },
+		int count = jdbcTemplate.queryForObject("SELECT count(*) FROM user WHERE email = ?", new Object[] { email },
 				Integer.class);
 		return count >= 1;
 	}
 
 	public User getUserByUsernameOrEmail(String usernameOrEmail) {
 		try {
-			User user = jdbcTemplate.queryForObject("SELECT * FROM User WHERE username = ? OR email = ?",
+			User user = jdbcTemplate.queryForObject("SELECT * FROM user WHERE username = ? OR email = ?",
 					new Object[] { usernameOrEmail, usernameOrEmail }, new BeanPropertyRowMapper<User>(User.class));
 			return user;
 		} catch (EmptyResultDataAccessException ex) {
@@ -47,13 +47,13 @@ public class UserRepository {
 	}
 
 	public User getUserById(Long userId) {
-		User user = jdbcTemplate.queryForObject("SELECT * FROM User WHERE id = ?", new Object[] { userId },
+		User user = jdbcTemplate.queryForObject("SELECT * FROM user WHERE id = ?", new Object[] { userId },
 				new BeanPropertyRowMapper<User>(User.class));
 		return user;
 	}
 
 	public void updateLastLogin(Long userId) {
-		jdbcTemplate.update("UPDATE User SET last_login_date = NOW() WHERE id = ?", new Object[] { userId });
+		jdbcTemplate.update("UPDATE user SET last_login_date = NOW() WHERE id = ?", new Object[] { userId });
 	}
 
 	public List<User> getUsersByPage(int pageNo, int noOfUsersPerPage) {
@@ -80,16 +80,16 @@ public class UserRepository {
 	}
 
 	public void updateUser(long id, String username, String hashedPassword, String email, String role, BigDecimal credits) {
-		jdbcTemplate.update("UPDATE User SET username = ?, password = ?, email = ?, role = ?, credits = ? WHERE id = ?",
+		jdbcTemplate.update("UPDATE user SET username = ?, password = ?, email = ?, role = ?, credits = ? WHERE id = ?",
 				new Object[] { username, hashedPassword, email, role, credits, id });
 	}
 
 	public void deleteUser(long id) {
-		jdbcTemplate.update("DELETE FROM User WHERE id = ?", new Object[] { id });
+		jdbcTemplate.update("DELETE FROM user WHERE id = ?", new Object[] { id });
 	}
 	
 	public void reduceCredits(long id, BigDecimal credits) {
-		jdbcTemplate.update("UPDATE User SET credits = credits - ? WHERE id = ?",
+		jdbcTemplate.update("UPDATE user SET credits = credits - ? WHERE id = ?",
 				new Object[] { credits, id });
 	}
 }

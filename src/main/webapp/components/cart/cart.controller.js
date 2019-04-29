@@ -89,7 +89,7 @@
             cartService.clear().then(
                 function successCallback(response) {
                     console.log(response);
-                    location.reload();
+                    vm.refreshCart();
                 },
                 function errorCallback(response) {
                     console.log(response);

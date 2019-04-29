@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.FileAlreadyExistsException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.ServletContext;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -199,8 +203,24 @@ public class AdminController {
 		productService.updateProduct(id, product.getName(), product.getPrice(), product.getQuantity(),
 				product.getDescription(), product.getCategories());
 
-		// Upload product image
 		if (null != file) {
+			try {
+				byte[] bytes = file.getBytes();
+				Blob blob = new SerialBlob(bytes);
+				productService.updateProductImage(id, blob);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SerialException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// Upload product image
+		/*if (null != file) {
 			// Delete previous product image if exists (as image extension might be
 			// different)
 			String prev = productService.getProduct(id).getImage();
@@ -226,7 +246,7 @@ public class AdminController {
 				e.printStackTrace();
 			}
 		}
-
+*/
 		Product p = productService.getProduct(id);
 		return ResponseEntity.ok(p);
 	}
@@ -249,8 +269,24 @@ public class AdminController {
 		// Add product
 		long pk = productService.addProduct(product.getName(), product.getPrice(), product.getQuantity(),
 				product.getDescription(), product.getCategories());
+		if (null != file) {
+			try {
+				byte[] bytes = file.getBytes();
+				Blob blob = new SerialBlob(bytes);
+				productService.updateProductImage(pk, blob);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SerialException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// Upload image
-		if (null != file && pk > 0) {
+		/*if (null != file && pk > 0) {
 			String uploadsDir = "assets/uploads/product-img/";
 			String uploadPath = servletContext.getRealPath(uploadsDir);
 			if (!new File(uploadPath).exists()) {
@@ -266,7 +302,7 @@ public class AdminController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		return ResponseEntity.ok("{}");
 	}
 

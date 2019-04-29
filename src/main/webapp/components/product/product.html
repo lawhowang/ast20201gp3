@@ -34,6 +34,7 @@
                     Categories
                 </div>
                 <div class="col-9">
+                    <span ng-if="productCtrl.product.categories.length == 0" class="text-secondary">N/A</span>
                     <span ng-repeat="category in productCtrl.product.categories"><a
                             href="#!/categories/{{category.id}}">{{category.name}}</a><span
                             ng-show="!$last">,&nbsp</span></span>
@@ -108,15 +109,15 @@
                     <div class="text-warning text-center mt-3 mt-lg-0">Rating</div>
                     <div class="mt-2 mb-3 text-center text-warning" style="cursor: pointer;">
                         <i class="far fa-star mr-1" ng-class="{ 'fas' : productCtrl.rating >= 1}"
-                            ng-mouseover="productCtrl.rating = 1" ng-click="productCtrl.rating = 1"></i>
+                            ng-mouseover="productCtrl.rating = 1" ng-click="productCtrl.rating = 1" data-toggle="tooltip" data-placement="top" title="1" onmouseenter="$(this).tooltip('show')"></i>
                         <i class="far fa-star mr-1" ng-class="{ 'fas' : productCtrl.rating >= 2}"
-                            ng-mouseover="productCtrl.rating = 2" ng-click="productCtrl.rating = 2"></i>
+                            ng-mouseover="productCtrl.rating = 2" ng-click="productCtrl.rating = 2" data-toggle="tooltip" data-placement="top" title="2" onmouseenter="$(this).tooltip('show')"></i>
                         <i class="far fa-star mr-1" ng-class="{ 'fas' : productCtrl.rating >= 3}"
-                            ng-mouseover="productCtrl.rating = 3" ng-click="productCtrl.rating = 3"></i>
+                            ng-mouseover="productCtrl.rating = 3" ng-click="productCtrl.rating = 3" data-toggle="tooltip" data-placement="top" title="3" onmouseenter="$(this).tooltip('show')"></i>
                         <i class="far fa-star mr-1" ng-class="{ 'fas' : productCtrl.rating >= 4}"
-                            ng-mouseover="productCtrl.rating = 4" ng-click="productCtrl.rating = 4"></i>
+                            ng-mouseover="productCtrl.rating = 4" ng-click="productCtrl.rating = 4" data-toggle="tooltip" data-placement="top" title="4" onmouseenter="$(this).tooltip('show')"></i>
                         <i class="far fa-star" ng-class="{ 'fas' : productCtrl.rating >= 5}"
-                            ng-mouseover="productCtrl.rating = 5" ng-click="productCtrl.rating = 5"></i>
+                            ng-mouseover="productCtrl.rating = 5" ng-click="productCtrl.rating = 5" data-toggle="tooltip" data-placement="top" title="5" onmouseenter="$(this).tooltip('show')"></i>
                     </div>
                     <button type="button" class="btn btn-outline-warning w-100" ng-click="productCtrl.submitComment()">
                         Submit
@@ -132,12 +133,16 @@
             <div class="rounded bg-light p-3 mb-2" ng-repeat="comment in productCtrl.comments.items">
                 <i class="far fa-user-circle avatar px-1 align-baseline"></i>
                 {{comment.username}}
-                <span class="text-secondary mx-2">&nbsp;|</span>
-                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 1}"></i>
-                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 2}"></i>
-                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 3}"></i>
-                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 4}"></i>
-                <i class="far fa-star mr-1 text-warning" ng-class="{ 'fas' : comment.rating >= 5}"></i>
+                <span class="text-secondary mx-2" style="opacity: .2">|</span>
+                <span class="rating" data-toggle="tooltip" data-placement="top" title="{{comment.rating}}" data-offset="{{(comment.rating - 3) * 26}}px,0"
+                onmouseenter="$(this).tooltip('show')">
+                    <i class="far fa-star text-warning" ng-class="{ 'fas' : comment.rating >= 1}"></i>
+                    <i class="far fa-star text-warning" ng-class="{ 'fas' : comment.rating >= 2}"></i>
+                    <i class="far fa-star text-warning" ng-class="{ 'fas' : comment.rating >= 3}"></i>
+                    <i class="far fa-star text-warning" ng-class="{ 'fas' : comment.rating >= 4}"></i>
+                    <i class="far fa-star text-warning" ng-class="{ 'fas' : comment.rating >= 5}"></i>
+                </span>
+                <span class="float-right text-secondary">{{comment.date | date: 'dd/MM/yy'}}</span>
                 <hr>
                 {{comment.comment}}
             </div>

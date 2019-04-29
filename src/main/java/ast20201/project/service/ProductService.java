@@ -1,6 +1,7 @@
 package ast20201.project.service;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,13 @@ public class ProductService {
 	public long addProduct(String name, BigDecimal price, Integer quantity, String description, List<Category> categories) {
         return productRepository.addProduct(name, price, quantity, description, categories);
     }
-    
-    public void updateProductImage(long id, String image) {
+	
+	public void updateProductImage(long id, Blob image) {
         productRepository.updateProductImage(id, image);
     }
+    /*public void updateProductImage(long id, String image) {
+        productRepository.updateProductImage(id, image);
+    }*/
 
 	public List<Product> getLatestProducts() {
 		return productRepository.getLatestProducts();

@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// Custom handler when not enough permission
 		http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
 
-		http.cors().and().csrf().disable().authorizeRequests().antMatchers("/admin/**").hasAuthority("ADMIN")
+		http.cors().and().csrf().disable().rememberMe().and().authorizeRequests().antMatchers("/admin/**").hasAuthority("ADMIN")
 				.antMatchers("/api/cart/**").authenticated().antMatchers("/api/order/**").authenticated()
 				.antMatchers("/api/credit/**").authenticated().anyRequest().permitAll();
 	}

@@ -85,7 +85,7 @@
 <security:authorize access="hasAnyAuthority('USER', 'ADMIN')">
   <security:authentication var="principal" property="principal" />
 
-  <body ng-cloak ng-controller="AppCtrl"
+  <body class="d-flex flex-column h-100" ng-cloak ng-controller="AppCtrl"
     ng-init="init('${principal.username}', '${principal.email}', '${principal.role}')">
 </security:authorize>
 <security:authorize access="!hasAnyAuthority('USER', 'ADMIN')">
@@ -101,10 +101,10 @@
 </security:authorize>
 <div ng-view></div>
 <footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-      <span class="text-muted">{{siteTitle}} 2019</span>
-    </div>
-  </footer>
+  <div class="container">
+    <span class="text-muted">{{siteTitle}} 2019</span>
+  </div>
+</footer>
 </body>
 
 </html>

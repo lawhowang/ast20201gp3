@@ -1,6 +1,7 @@
 package ast20201.project.repository;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,7 +97,7 @@ public class ProductRepository {
                 BigDecimal price = rs.getBigDecimal("price");
                 Integer quantity = (Integer) rs.getObject("quantity");
                 String description = rs.getString("description");
-                String image = rs.getString("image");
+                Blob image = rs.getBlob("image");
 
                 List<Category> categories = getProductCategories(id);
 
@@ -120,7 +121,7 @@ public class ProductRepository {
             BigDecimal price = rs.getBigDecimal("price");
             Integer quantity = (Integer) rs.getObject("quantity");
             String description = rs.getString("description");
-            String image = rs.getString("image");
+            Blob image = rs.getBlob("image");
 
             List<Category> categories = getProductCategories(id);
 
@@ -188,7 +189,7 @@ public class ProductRepository {
         return pk;
     }
 
-    public void updateProductImage(long id, String image) {
+    public void updateProductImage(long id, Blob image) {
         jdbcTemplate.update("UPDATE product SET image = ? WHERE id = ?", new Object[] { image, id });
     }
 
@@ -238,7 +239,7 @@ public class ProductRepository {
                 BigDecimal price = rs.getBigDecimal("price");
                 Integer quantity = (Integer) rs.getObject("quantity");
                 String description = rs.getString("description");
-                String image = rs.getString("image");
+                Blob image = rs.getBlob("image");
 
                 List<Category> categories = getProductCategories(id);
 

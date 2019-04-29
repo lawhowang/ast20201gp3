@@ -6,6 +6,7 @@ package ast20201.project.model;
 
 import ast20201.project.validation.ValidationGroup;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
@@ -21,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Component
-public class User {
+public class User implements Serializable {
 	@NotNull(groups = { ValidationGroup.EditUser.class }, message = "ID is a required field")
 	private long id;
 

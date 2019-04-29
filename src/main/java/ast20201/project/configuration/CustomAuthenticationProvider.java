@@ -34,7 +34,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	 */
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
 		String usernameOrEmail = authentication.getName();
 		String password = authentication.getCredentials().toString();
 		String hashedPassword = DigestUtils.md5DigestAsHex(password.getBytes());
@@ -53,7 +52,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
 		ArrayList<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(user.getRole().toUpperCase()));
-		System.out.println(authorities);
+
 		Authentication auth = new UsernamePasswordAuthenticationToken(user, null, authorities);
 
 		return auth;

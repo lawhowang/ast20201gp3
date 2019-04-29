@@ -1,14 +1,14 @@
 <div class="category-tree p-2 bg-light rounded">
     <script type="text/ng-template" id="category-tree">
-        <a href="{{ '#!categories/' + category.id }}" class="text-secondary">{{ category.name }}</a>
-        <ul ng-if="category.children">
-            <li ng-repeat="category in category.children" ng-include="'category-tree'">           
+        <a href="{{ '#!categories/' + category.id }}" class="text-secondary" style="padding-left: {{depth * 15}}px !important">{{ category.name }}</a>
+        <ul ng-if="category.children && depth < 3">
+            <li ng-repeat="category in category.children" ng-include="'category-tree'" ng-init="depth = depth + 1">           
             </li>
         </ul>
     </script>
     <h6 class="p-2">Category</h6>
     <ul class="list-group">
-        <li class="list-group-item" ng-repeat="category in categoryListCtrl.categories" ng-include="'category-tree'">
+        <li class="list-group-item" ng-repeat="category in categoryListCtrl.categories" ng-include="'category-tree'" ng-init="depth = depth + 1">
         </li>
     </ul>
 </div>

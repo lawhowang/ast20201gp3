@@ -4,16 +4,16 @@
             <category-list></category-list>
         </div>
         <div class="col-12 col-md-8 col-xl-9 py-md-3">
-            <div id="carousel" class="carousel slide" data-ride="carousel">
+            <div id="carousel" class="carousel slide home-slides" data-ride="carousel">
                 <ol class="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" ng-repeat="slide in homeCtrl.slides track by $index"
                         data-slide-to="{{$index}}" ng-class="{ 'active': $index == 0}"></li>
                 </ol>
                 <div class="carousel-inner">
-                    <div class="carousel-item" ng-repeat="slide in homeCtrl.slides track by $index"
+                    <div class="carousel-item" ng-swipe-left="$parent.$parent.prev()" ng-swipe-right="$parent.$parent.next()" ng-repeat="slide in homeCtrl.slides track by $index"
                         ng-class="{ 'active': $index == 0}">
                         <a href="{{slide.url}}">
-                            <img ng-src="{{slide.imageUrl}}" class="d-block h-25">
+                            <img ng-src="{{slide.imageUrl}}" class="d-block">
                         </a>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-12">
             <h4 class="text-secondary">Latest Arrivals</h4>
             <hr>
@@ -39,7 +39,7 @@
                         ng-class="{ 'active': $index == 0}"></li>
                 </ol>
                 <div class="carousel-inner">
-                    <div class="carousel-item" ng-repeat="group in homeCtrl.latestProducts track by $index"
+                    <div class="carousel-item" ng-swipe-left="$parent.$parent.prev()" ng-swipe-right="$parent.$parent.next()" ng-repeat="group in homeCtrl.latestProducts"
                         ng-class="{ 'active': $index == 0}">
                         <div class="row" style="padding: 0 5%">
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3" ng-repeat="product in group">

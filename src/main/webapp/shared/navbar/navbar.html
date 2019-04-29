@@ -17,15 +17,15 @@
                                 aria-expanded="false">{{ navbarCtrl.selectedCategoryText }}</button>
                             <div class="dropdown-menu category-tree">
                                 <script type="text/ng-template" id="dropdown-category-tree">
-                                    <a class="text-secondary" ng-click="navbarCtrl.selectCategory(category.id, category.name)">{{ category.name }}</a>
+                                    <a class="text-secondary" ng-click="navbarCtrl.selectCategory(category.id, category.name)" style="padding-left: {{depth * 15}}px !important">{{ category.name }}</a>
                             <ul ng-if="category.children">
-                                <li ng-repeat="category in category.children" ng-include="'dropdown-category-tree'" >           
+                                <li ng-repeat="category in category.children" ng-include="'dropdown-category-tree'" ng-init="depth = depth + 1">           
                                 </li>
                             </ul>
                         </script>
                                 <ul class="list-group">
                                     <li class="list-group-item" ng-repeat="category in navbarCtrl.categories"
-                                        ng-include="'dropdown-category-tree'">
+                                        ng-include="'dropdown-category-tree'" ng-init="depth = depth + 1">
                                     </li>
                                 </ul>
                             </div>
@@ -40,7 +40,7 @@
                     <a class="p-3 d-block text-secondary" href="#!/products/{{product.id}}"
                         ng-repeat="product in navbarCtrl.searchProducts" ng-if="!navbarCtrl.searching"
                         ng-click="navbarCtrl.searchName = null">
-                        <img ng-if="product.image" ng-src="../{{product.image}}" class="p-1" width="64">
+                        <img ng-if="product.image" ng-src="{{product.image}}" class="p-1" width="64">
                         {{product.name}}
                     </a>
                 </div>
