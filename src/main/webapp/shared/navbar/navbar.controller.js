@@ -34,14 +34,20 @@
                 $location.path(`/search/${categoryId}/${name}`);
             }
         };
-
+        
+        var canceller;
         vm.searchProduct = function () {
 
             if (!vm.searchName || vm.searchName.length == 0) {
                 delete vm.searchProducts;
                 return;
             }
+            if (vm.searching) {
+                canceller.resolve();
+            }
             vm.searching = true;
+            canceller = $q.defer();
+
             searchService.searchProduct(vm.searchName, vm.selectedCategoryId, 1)
                 .then(function sucessCallback(response) {
                     console.log(response);
