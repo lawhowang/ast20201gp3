@@ -115,6 +115,14 @@ img {
     height: 230px;
     object-fit: contain;
 }
+.product .card-title {
+    height: 48px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 /* remove arrow for input type number */
 input[type=number]::-webkit-inner-spin-button,
