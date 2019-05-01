@@ -21,7 +21,8 @@
                 .then(function sucessCallback(response) {
                     console.log(response);
                     vm.data = response.data;
-                    getTopSellingProductInfo(vm.data.topSellingProduct);
+                    if (vm.data.topSellingProduct != 0)
+                        getTopSellingProductInfo(vm.data.topSellingProduct);
                 }, function errorCallBack(response) {
                     console.log(response);
                 });

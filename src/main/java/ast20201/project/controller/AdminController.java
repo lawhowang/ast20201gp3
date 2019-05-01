@@ -319,10 +319,9 @@ public class AdminController {
 			break;
 		case "month":
 			cal.setTime(start);
-			cal.add(Calendar.MONTH, -1);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
 			start = new Date(cal.getTimeInMillis());
-			cal.setTime(end);
-			cal.add(Calendar.DATE, 1);
+			cal.add(Calendar.MONTH, 1);
 			end = new Date(cal.getTimeInMillis());
 			break;
 		case "alltime":

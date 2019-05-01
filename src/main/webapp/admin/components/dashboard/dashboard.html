@@ -57,13 +57,14 @@
                 </div>
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="block stat bg-light p-2 mb-3 shadow-sm fade-in-view">
-                        <h1 class="display-6 mt-3 font-weight-bold">
+                        <h1 class="display-6 mt-3 font-weight-bold" ng-if="dashboardCtrl.product">
                             <a href="{{'#!products/' + dashboardCtrl.product.id}}">
                                 <a class="text-dark card-link" target="_blank" href="{{'../#!products/' + dashboardCtrl.product.id}}">
                                     <img ng-if="dashboardCtrl.product.image" ng-src="{{dashboardCtrl.product.image}}" class="p-1" width="64" />
                                     <br>{{dashboardCtrl.product.name}}
                                 </a>
                         </h1>
+                        <h1 class="display-3 mt-3 font-weight-bold" ng-if="!dashboardCtrl.product">N/A</h1>
                         <h5 class="text-secondary font-weight-normal">Top Selling Product</h5>
                     </div>
                 </div>
