@@ -68,7 +68,8 @@
             })
             .when('/categories/:id/', {
                 template: '<category></category>',
-                title: 'Category'
+                title: 'Category',
+                reloadOnSearch: false
             })
             .when('/search/:category/:name', {
                 template: '<search></search>',

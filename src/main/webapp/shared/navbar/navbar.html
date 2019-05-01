@@ -30,19 +30,22 @@
                                 </ul>
                             </div>
                         </div>
-                        <input id="search-text" type="text" class="form-control" aria-label="Search" placeholder="Search products"
-                            ng-model="navbarCtrl.searchName" ng-change="navbarCtrl.searchProduct()"
-                            ng-blur="navbarCtrl.searchFocus = false; navbarCtrl.cancelSearch()" ng-focus="navbarCtrl.searchFocus = true">
+                        <input id="search-text" type="text" class="form-control" autocomplete="off" aria-label="Search"
+                            placeholder="Search products" ng-model="navbarCtrl.searchName"
+                            ng-change="navbarCtrl.searchProduct()"
+                            ng-blur="navbarCtrl.searchFocus = false; navbarCtrl.cancelSearch()"
+                            ng-focus="navbarCtrl.searchFocus = true">
                     </div>
                 </form>
                 <div class="position-absolute bg-white w-100 shadow ajax-search-result" style="z-index: 99"
                     ng-if="navbarCtrl.searchName">
-                    <a class="p-3 d-block text-secondary" href="#!/products/{{product.id}}"
-                        ng-repeat="product in navbarCtrl.searchProducts" ng-if="!navbarCtrl.searching"
-                        ng-click="navbarCtrl.searchName = null">
-                        <img ng-if="product.image" ng-src="{{product.image}}" class="p-1" width="64">
-                        {{product.name}}
-                    </a>
+                    <div ng-repeat="product in navbarCtrl.searchProducts">
+                        <a class="p-3 d-block text-secondary" href="#!/products/{{product.id}}"
+                            ng-click="navbarCtrl.searchName = null">
+                            <img ng-if="product.image" ng-src="{{product.image}}" class="p-1" width="64">
+                            {{product.name}}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

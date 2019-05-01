@@ -1,4 +1,7 @@
 runtime: java
 env: flex
+handlers:
+- url: /.*
+  script: this field is required, but ignored
 automatic_scaling:
   min_instances: 1

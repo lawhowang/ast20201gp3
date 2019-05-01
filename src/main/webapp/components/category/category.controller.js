@@ -5,9 +5,9 @@
         .module('app')
         .controller('CategoryCtrl', CategoryCtrl);
 
-    CategoryCtrl.$inject = ['categoryService', '$routeParams'];
+    CategoryCtrl.$inject = ['categoryService', '$routeParams', '$location'];
 
-    function CategoryCtrl(categoryService, $routeParams) {
+    function CategoryCtrl(categoryService, $routeParams, $location) {
         var vm = this;
 
         vm.categoryId = $routeParams.id;
@@ -24,15 +24,15 @@
             }
         }
 
-        vm.getProducts = function () {
+        vm.getProducts = function (page) {
             var categoryId = $routeParams.id;
-            var page = $routeParams.page;
             if (categoryId) {
                 categoryService.getProducts(categoryId, page)
                     .then(function successCallback(response) {
                         vm.products = response.data.items;
                         vm.currPage = response.data.currPage;
                         vm.maxPages = response.data.maxPages;
+                        $location.search('page', vm.currPage);
                         console.log(response);
                     }, function errorCallback(response) {
                         console.log(response);
@@ -40,6 +40,9 @@
             }
         };
         vm.getCategory();
-        vm.getProducts();
+        if ($routeParams.page)
+            vm.getProducts($routeParams.page);
+        else
+            vm.getProducts(1);
     }
 })();

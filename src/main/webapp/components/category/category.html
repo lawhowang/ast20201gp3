@@ -36,7 +36,7 @@
     </div>
     <div class="my-4">
         <pagination ng-if="categoryCtrl.maxPages" curr-page="categoryCtrl.currPage" max-pages="categoryCtrl.maxPages"
-            href-prefix="?page=">
+            func="categoryCtrl.getProducts(page)">
         </pagination>
     </div>
 </div>
