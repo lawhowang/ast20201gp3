@@ -3,6 +3,7 @@ package ast20201.project.repository;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -216,7 +217,8 @@ public class ProductRepository {
                             Category subCategory = new Category(id, name, order, level);
                             if (parent != null)
                                 parent.addChildren(subCategory);
-                            result.put(id, subCategory); // Keep as an referece in the hash map for adding subcategories
+                            result.put(id, subCategory); // Keep as an reference in the hash map for adding
+                                                         // subcategories
                         }
                     }
                     // Return level 0 category only
@@ -230,23 +232,29 @@ public class ProductRepository {
         return categories;
     }
 
-	public List<Product> getLatestProducts() {
-		List<Product> products = jdbcTemplate.query("SELECT * FROM product WHERE deleted = 0 ORDER BY id LIMIT 0, 12", (ResultSet rs) -> {
-            List<Product> result = new ArrayList<Product>();
-            while (rs.next()) {
-                long id = rs.getLong("id");
-                String name = rs.getString("name");
-                BigDecimal price = rs.getBigDecimal("price");
-                Integer quantity = (Integer) rs.getObject("quantity");
-                String description = rs.getString("description");
-                Blob image = rs.getBlob("image");
+    public List<Product> getLatestProducts() {
+        List<Product> products = jdbcTemplate.query("SELECT * FROM product WHERE deleted = 0 ORDER BY id LIMIT 0, 12",
+                (ResultSet rs) -> {
+                    List<Product> result = new ArrayList<Product>();
+                    while (rs.next()) {
+                        long id = rs.getLong("id");
+                        String name = rs.getString("name");
+                        BigDecimal price = rs.getBigDecimal("price");
+                        Integer quantity = (Integer) rs.getObject("quantity");
+                        String description = rs.getString("description");
+                        Blob image = rs.getBlob("image");
 
-                List<Category> categories = getProductCategories(id);
+                        List<Category> categories = getProductCategories(id);
 
-                result.add(new Product(id, name, price, quantity, description, categories, image));
-            }
-            return result;
-        });
+                        result.add(new Product(id, name, price, quantity, description, categories, image));
+                    }
+                    return result;
+                });
         return products;
-	}
+    }
+
+    public void reduceProductQuantity(long productId, int amount) {
+        jdbcTemplate.update("UPDATE product SET quantity = GREATEST(quantity - ?, 0) WHERE id = ?",
+                new Object[] { amount, productId });
+    }
 }

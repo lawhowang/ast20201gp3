@@ -1,18 +1,22 @@
 package ast20201.project.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.FileAlreadyExistsException;
 import java.sql.Blob;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.ServletContext;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 import javax.validation.Valid;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -95,7 +99,8 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/users", method = RequestMethod.PUT)
-	public ResponseEntity<?> updateUser(@Validated({ ValidationGroup.EditUser.class }) @RequestBody UserWithProfile user) {
+	public ResponseEntity<?> updateUser(
+			@Validated({ ValidationGroup.EditUser.class }) @RequestBody UserWithProfile user) {
 
 		FieldErrorResponse errors = new FieldErrorResponse();
 
@@ -219,34 +224,6 @@ public class AdminController {
 				e.printStackTrace();
 			}
 		}
-		// Upload product image
-		/*if (null != file) {
-			// Delete previous product image if exists (as image extension might be
-			// different)
-			String prev = productService.getProduct(id).getImage();
-			if (null != prev) {
-				String prevPath = servletContext.getRealPath(prev);
-				File prevImage = new File(prevPath);
-				prevImage.delete();
-			}
-
-			String uploadsDir = "assets/uploads/product-img/";
-			String uploadPath = servletContext.getRealPath(uploadsDir);
-			if (!new File(uploadPath).exists()) {
-				new File(uploadPath).mkdir();
-			}
-			String saveFileName = "product_" + id + "." + file.getOriginalFilename().split("\\.")[1];
-			String filePath = uploadPath + saveFileName;
-			File dest = new File(filePath);
-			try {
-				file.transferTo(dest);
-				// If success then update product image
-				productService.updateProductImage(id, uploadsDir + saveFileName);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-*/
 		Product p = productService.getProduct(id);
 		return ResponseEntity.ok(p);
 	}
@@ -285,24 +262,6 @@ public class AdminController {
 				e.printStackTrace();
 			}
 		}
-		// Upload image
-		/*if (null != file && pk > 0) {
-			String uploadsDir = "assets/uploads/product-img/";
-			String uploadPath = servletContext.getRealPath(uploadsDir);
-			if (!new File(uploadPath).exists()) {
-				new File(uploadPath).mkdir();
-			}
-			String saveFileName = "product_" + pk + "." + file.getOriginalFilename().split("\\.")[1];
-			String filePath = uploadPath + saveFileName;
-			File dest = new File(filePath);
-			try {
-				file.transferTo(dest);
-				// If success then update product image
-				productService.updateProductImage(pk, uploadsDir + saveFileName);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}*/
 		return ResponseEntity.ok("{}");
 	}
 
@@ -336,8 +295,56 @@ public class AdminController {
 	}
 
 	@RequestMapping(value = "/orders/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<?> getOrder(@PathVariable("id") long id, @RequestBody Order order) {
+	public ResponseEntity<?> updateOrder(@PathVariable("id") long id, @RequestBody Order order) {
 		Order dborder = orderService.updateOrder(id, order);
 		return ResponseEntity.ok(dborder);
+	}
+
+	@RequestMapping(value = "/figures/{range}", method = RequestMethod.GET)
+	public ResponseEntity<?> getFigures(@PathVariable("range") String range) throws JsonProcessingException {
+		long now = System.currentTimeMillis();
+		Date start = new Date(now);
+		Date end = new Date(now);
+		Calendar cal = Calendar.getInstance();
+		switch (range) {
+		case "today":
+			cal.setTime(end);
+			cal.add(Calendar.DATE, 1);
+			end = new Date(cal.getTimeInMillis());
+			break;
+		case "yesterday":
+			cal.setTime(start);
+			cal.add(Calendar.DATE, -1);
+			start = new Date(cal.getTimeInMillis());
+			break;
+		case "month":
+			cal.setTime(start);
+			cal.add(Calendar.MONTH, -1);
+			start = new Date(cal.getTimeInMillis());
+			cal.setTime(end);
+			cal.add(Calendar.DATE, 1);
+			end = new Date(cal.getTimeInMillis());
+			break;
+		case "alltime":
+			cal.setTime(start);
+			cal.add(Calendar.YEAR, -999);
+			start = new Date(cal.getTimeInMillis());
+			cal.setTime(end);
+			cal.add(Calendar.YEAR, 999);
+			end = new Date(cal.getTimeInMillis());
+			break;
+		}
+		int numberOfUsers = userService.getNumberOfUsers(start, end);
+		BigDecimal sales = orderService.getSales(start, end);
+		int numberOfOrders = orderService.getNumberOfOrders(start, end);
+		long topSellingProduct = orderService.getTopSellingProduct(start, end);
+
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode rootNode = mapper.createObjectNode();
+		((ObjectNode) rootNode).put("numberOfUsers", String.valueOf(numberOfUsers));
+		((ObjectNode) rootNode).put("sales", String.valueOf(sales));
+		((ObjectNode) rootNode).put("numberOfOrders", String.valueOf(numberOfOrders));
+		((ObjectNode) rootNode).put("topSellingProduct", String.valueOf(topSellingProduct));
+		return ResponseEntity.ok(mapper.writeValueAsString(rootNode));
 	}
 }

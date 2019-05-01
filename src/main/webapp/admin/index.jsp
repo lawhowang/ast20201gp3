@@ -34,6 +34,7 @@
     <script src="components/sidebar/sidebar.directive.js"></script>
     <script src="components/dashboard/dashboard.controller.js"></script>
     <script src="components/dashboard/dashboard.directive.js"></script>
+    <script src="components/dashboard/dashboard.service.js"></script>
     <script src="components/users/all-users.controller.js"></script>
     <script src="components/users/all-users.directive.js"></script>
     <script src="components/users/edit-user.controller.js"></script>

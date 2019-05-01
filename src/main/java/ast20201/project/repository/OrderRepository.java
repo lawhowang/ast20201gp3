@@ -2,6 +2,7 @@ package ast20201.project.repository;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -111,13 +112,15 @@ public class OrderRepository {
     }
 
     public BigDecimal getOrderTotalPrice(long orderId) {
-        BigDecimal price = jdbcTemplate.queryForObject("SELECT SUM(price * amount) FROM order_product WHERE order_id = ?",
-                new Object[] { orderId }, BigDecimal.class);
+        BigDecimal price = jdbcTemplate.queryForObject(
+                "SELECT SUM(price * amount) FROM order_product WHERE order_id = ?", new Object[] { orderId },
+                BigDecimal.class);
         return price;
     }
 
     public boolean hasOrderProduct(long orderId, long productId) {
-        int count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM order_product WHERE order_id = ? AND product_id = ?",
+        int count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM order_product WHERE order_id = ? AND product_id = ?",
                 new Object[] { orderId, productId }, Integer.class);
         return count >= 1;
     }
@@ -140,10 +143,11 @@ public class OrderRepository {
             } else {
                 BigDecimal price = BigDecimal.ZERO;
                 price = jdbcTemplate.queryForObject("SELECT price FROM product WHERE id = ?",
-                new Object[] { orderProduct.getId() }, BigDecimal.class);
+                        new Object[] { orderProduct.getId() }, BigDecimal.class);
 
-                jdbcTemplate.update("INSERT INTO order_product (order_id, product_id, amount, price) VALUES (?, ?, ?, ?)",
-                new Object[] { id, orderProduct.getId(), orderProduct.getAmount(), price });
+                jdbcTemplate.update(
+                        "INSERT INTO order_product (order_id, product_id, amount, price) VALUES (?, ?, ?, ?)",
+                        new Object[] { id, orderProduct.getId(), orderProduct.getAmount(), price });
             }
         }
 
@@ -156,4 +160,29 @@ public class OrderRepository {
         }
     }
 
+    public int getNumberOfOrders(Date start, Date end) {
+        int count = jdbcTemplate.queryForObject(
+                "SELECT COUNT(*) FROM `order` WHERE (create_date >= ? AND create_date < ?)",
+                new Object[] { start, end }, Integer.class);
+        return count;
+    }
+
+    public BigDecimal getSales(Date start, Date end) {
+        BigDecimal sales = jdbcTemplate.queryForObject(
+                "SELECT COALESCE(SUM(price * amount), 0) FROM `order_product` op JOIN `order` o ON o.id = op.order_id AND o.payment_status = 1 AND (o.confirm_date  >= ? AND o.confirm_date < ?)",
+                new Object[] { start, end }, BigDecimal.class);
+        return sales;
+    }
+
+    public long getTopSellingProduct(Date start, Date end) {
+        try {
+            long productId = jdbcTemplate.queryForObject(
+                    "SELECT p.id FROM product p JOIN `order_product` op ON op.product_id = p.id JOIN `order` o ON o.id = op.order_id AND o.payment_status = 1 AND (o.confirm_date  >= ? AND o.confirm_date < ?) GROUP BY p.id ORDER BY amount DESC LIMIT 0, 1",
+                    new Object[] { start, end }, Long.class);
+            return productId;
+        } catch (Exception ex) {
+            return 0l;
+        }
+
+    }
 }

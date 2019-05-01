@@ -99,7 +99,7 @@
         vm.paymentStatusMessage = function (paymentStatus) {
             switch (paymentStatus) {
                 case 0:
-                    return 'Unpaid';
+                    return 'Pending';
                 case 1:
                     return 'Paid';
             }

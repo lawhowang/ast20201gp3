@@ -4,23 +4,70 @@
             <div class="row">
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="block stat bg-light p-2 mb-3 shadow-sm fade-in-view">
-                        <h1 class="display-3 mt-3 font-weight-bold">{{dashboardCtrl.totalUserCount}}</h1>
+                        <h1 class="display-3 mt-3 font-weight-bold">{{dashboardCtrl.alltime.numberOfUsers}}</h1>
                         <h5 class="text-secondary font-weight-normal">Total Users</h5>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="block bg-light p-2 mb-3 shadow-sm"></div>
+                    <div class="block stat bg-light p-2 mb-3 shadow-sm fade-in-view">
+                        <h1 class="display-3 mt-3 font-weight-bold">${{dashboardCtrl.alltime.sales}}</h1>
+                        <h5 class="text-secondary font-weight-normal">Total Sales</h5>
+                    </div>
                 </div>
                 <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="block bg-light p-2 mb-3 shadow-sm"></div>
-                </div>
-                <div class="col-12 col-sm-6 col-xl-3">
-                    <div class="block bg-light p-2 mb-3 shadow-sm"></div>
+                    <div class="block stat bg-light p-2 mb-3 shadow-sm fade-in-view">
+                        <h1 class="display-3 mt-3 font-weight-bold">{{dashboardCtrl.alltime.numberOfOrders}}</h1>
+                        <h5 class="text-secondary font-weight-normal">Total # of Orders</h5>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col12 col-md-7 col-lg-9 col-xl-9">
-
+        <div class="col12 col-md-7 col-lg-9 col-xl-9 mb-3">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active" ng-click="dashboardCtrl.getFigures('today')">
+                    <input type="radio" name="options" id="option1" autocomplete="off" checked> Today
+                </label>
+                <label class="btn btn-secondary" ng-click="dashboardCtrl.getFigures('yesterday')">
+                    <input type="radio" name="options" id="option2" autocomplete="off"> Yesterday
+                </label>
+                <label class="btn btn-secondary" ng-click="dashboardCtrl.getFigures('month')">
+                    <input type="radio" name="options" id="option3" autocomplete="off"> Month
+                </label>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="block stat bg-light p-2 mb-3 shadow-sm fade-in-view">
+                        <h1 class="display-3 mt-3 font-weight-bold">{{dashboardCtrl.data.numberOfUsers}}</h1>
+                        <h5 class="text-secondary font-weight-normal">Total Users</h5>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="block stat bg-light p-2 mb-3 shadow-sm fade-in-view">
+                        <h1 class="display-3 mt-3 font-weight-bold">${{dashboardCtrl.data.sales}}</h1>
+                        <h5 class="text-secondary font-weight-normal">Total Sales</h5>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="block stat bg-light p-2 mb-3 shadow-sm fade-in-view">
+                        <h1 class="display-3 mt-3 font-weight-bold">{{dashboardCtrl.data.numberOfOrders}}</h1>
+                        <h5 class="text-secondary font-weight-normal">Total # of Orders</h5>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="block stat bg-light p-2 mb-3 shadow-sm fade-in-view">
+                        <h1 class="display-6 mt-3 font-weight-bold">
+                            <a href="{{'#!products/' + dashboardCtrl.product.id}}">
+                                <a class="text-dark card-link" target="_blank" href="{{'../#!products/' + dashboardCtrl.product.id}}">
+                                    <img ng-if="dashboardCtrl.product.image" ng-src="{{dashboardCtrl.product.image}}" class="p-1" width="64" />
+                                    <br>{{dashboardCtrl.product.name}}
+                                </a>
+                        </h1>
+                        <h5 class="text-secondary font-weight-normal">Top Selling Product</h5>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

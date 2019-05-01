@@ -1,6 +1,7 @@
 package ast20201.project.service;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +57,8 @@ public class OrderService {
             long product = orderProduct.getId();
             Product dbproduct = productRepository.getProduct(product);
             if (dbproduct.getQuantity() != null && orderProduct.getAmount() > dbproduct.getQuantity()) {
-                throw new InsufficientStockException(
-                        "Insufficient stock! Please adjust the amount below the stock level", dbproduct);
+            	throw new InsufficientStockException(
+            			"Insufficient stock! Please adjust the amount below the stock level", dbproduct);
             }
         }
         String message = order.getMessage();
@@ -71,16 +72,41 @@ public class OrderService {
 
 	public Order updateOrder(long id, Order order) {
         orderRepository.updateOrder(id, order.getOrderProducts(), order.getOrderStatus(), order.getPaymentStatus(), order.getCreateDate(), order.getMessage(), order.getAdminMessage());
+        if (order.getPaymentStatus() == 1) {
+        	List<OrderProduct> orderProducts = order.getOrderProducts();
+            for (OrderProduct orderProduct : orderProducts) {
+                long product = orderProduct.getId();
+                int amount = orderProduct.getAmount();
+                productRepository.reduceProductQuantity(product, amount);
+            }
+        }
         return getOrder(id);
 	}
 
-	public void confirmOrder(long userId, long orderId) throws InsufficientCreditsException, OrderCancelledException, OrderPaidException {
-        BigDecimal totalPrice = orderRepository.getOrderTotalPrice(orderId);
+	public void confirmOrder(long userId, long orderId) throws InsufficientCreditsException, OrderCancelledException, OrderPaidException, InsufficientStockException {
+		List<OrderProduct> orderProducts = orderRepository.getOrderProducts(orderId);
+		for (OrderProduct orderProduct : orderProducts) {
+            long product = orderProduct.getId();
+            Product dbproduct = productRepository.getProduct(product);
+            if (dbproduct.getQuantity() != null) {
+            	if (orderProduct.getAmount() > dbproduct.getQuantity()) {
+            		throw new InsufficientStockException(
+            				"Insufficient stock! Please either wait for refill or recreate an order", dbproduct);
+            	}
+            	else {
+            		int amount = orderProduct.getAmount();
+            		productRepository.reduceProductQuantity(product, amount);
+            	}
+            }
+        }
+		
+		BigDecimal totalPrice = orderRepository.getOrderTotalPrice(orderId);
         BigDecimal userCredits = userRepository.getUser(userId).getCredits();
         if (totalPrice.compareTo(userCredits) > 0) {
             throw new InsufficientCreditsException("Insufficient credits. Please recharge the credits.");
         }
         userRepository.reduceCredits(userId, totalPrice);
+        
         Order order = getOrder(orderId);
         if (order.getOrderStatus() == -1) {
             throw new OrderCancelledException("Payment has been declined as the order has been cancelled");
@@ -89,6 +115,16 @@ public class OrderService {
             throw new OrderPaidException("Payment has been declined as the order has been paid");
         }
         orderRepository.updateOrder(order.getId(), order.getOrderProducts(), order.getOrderStatus(), 1, order.getCreateDate(), order.getMessage(), order.getAdminMessage());
-	}
+    }
+    public BigDecimal getSales(Date start, Date end) {
+        return orderRepository.getSales(start, end);
+    }
 
+    public int getNumberOfOrders(Date start, Date end) {
+        return orderRepository.getNumberOfOrders(start, end);
+    }
+
+    public long getTopSellingProduct(Date start, Date end) {
+        return orderRepository.getTopSellingProduct(start, end);
+    }
 }

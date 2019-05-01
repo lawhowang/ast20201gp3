@@ -47,7 +47,7 @@
                 <div class="col-9">
                     <p class="text-secondary"
                         ng-class="productCtrl.product.quantity > 0 ? 'text-success' : 'text-danger'">
-                        {{productCtrl.product.quantity}} left in stock</p>
+                        {{productCtrl.product.quantity > 0 ? productCtrl.product.quantity + ' left in stock' : 'Out of stock'}}</p>
                 </div>
             </div>
 

@@ -1,6 +1,7 @@
 package ast20201.project.repository;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +92,11 @@ public class UserRepository {
 	public void reduceCredits(long id, BigDecimal credits) {
 		jdbcTemplate.update("UPDATE user SET credits = credits - ? WHERE id = ?",
 				new Object[] { credits, id });
+	}
+
+	public int getNumberOfUsers(Date start, Date end) {
+		int count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM user WHERE (create_date >= ? AND create_date < ?)",
+				new Object[] { start, end }, Integer.class);
+		return count;
 	}
 }

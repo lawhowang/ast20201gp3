@@ -1,6 +1,7 @@
 package ast20201.project.service;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,4 +95,7 @@ public class UserService {
 		userRepository.deleteUser(id);
 	}
 
+	public int getNumberOfUsers(Date start, Date end) {
+		return userRepository.getNumberOfUsers(start, end);
+	}
 }

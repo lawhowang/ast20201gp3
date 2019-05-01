@@ -73,6 +73,10 @@ public class OrderController {
         User user = userService.getCurrentUser();
         try {
             orderService.confirmOrder(user.getId(), orderId);
+        } catch (InsufficientStockException ex) {
+            FieldErrorResponse errors = new FieldErrorResponse();
+            errors.addErrors("" + ex.getProduct().getId(), ex.getMessage());
+            return ResponseEntity.badRequest().body(errors);
         } catch (InsufficientCreditsException ex) {
             FieldErrorResponse errors = new FieldErrorResponse();
             errors.addErrors("credits", ex.getMessage());

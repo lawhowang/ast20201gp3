@@ -116,6 +116,7 @@
                                     {{product.name}}
                                     <span class="text-secondary" ng-if="product.quantity">({{product.quantity}} left in
                                         stock)</span>
+                                        <span class="text-secondary" ng-if="product.quantity && product.quantity <= 0">(Out of stock)</span>
                                     <span class="float-right text-secondary">
                                         ${{product.price | number : 2}}
                                     </span>
@@ -165,7 +166,7 @@
                 <div class="custom-control custom-radio">
                     <input type="radio" id="payment-status-unpaid" name="paymentStatus" class="custom-control-input"
                         ng-value="0" ng-model="customerOrderCtrl.order.paymentStatus">
-                    <label class="custom-control-label" for="payment-status-unpaid">Unpaid</label>
+                    <label class="custom-control-label" for="payment-status-unpaid">Pending</label>
                 </div>
                 <div class="custom-control custom-radio">
                     <input type="radio" id="payment-status-paid" name="paymentStatus" class="custom-control-input"
