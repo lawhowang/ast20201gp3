@@ -20,11 +20,11 @@ public class CartItem {
         this.amount = amount;
     }
     
-    public long getProduct() {
+    public long getProductId() {
         return productId;
     }
 
-    public void setProduct(long productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 

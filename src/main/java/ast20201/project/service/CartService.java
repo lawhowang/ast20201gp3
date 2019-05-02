@@ -22,7 +22,7 @@ public class CartService {
         List<CartItem> cartItems = getItems(userId);
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (CartItem cartItem : cartItems) {
-            BigDecimal price = productRepositry.getProduct(cartItem.getProduct()).getPrice();
+            BigDecimal price = productRepositry.getProduct(cartItem.getProductId()).getPrice();
             totalPrice.add(price);
         }
         return new Cart(cartItems, totalPrice);

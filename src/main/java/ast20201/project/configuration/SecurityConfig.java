@@ -1,7 +1,5 @@
 /*
  * References
- * https://blog.csdn.net/itguangit/article/details/78960127
- * https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/
  * https://segmentfault.com/a/1190000010434946
  * https://stackoverflow.com/questions/19500332/spring-security-and-json-authentication
  */
