@@ -177,7 +177,7 @@ public class OrderRepository {
     public long getTopSellingProduct(Date start, Date end) {
         try {
             long productId = jdbcTemplate.queryForObject(
-                    "SELECT p.id FROM product p JOIN `order_product` op ON op.product_id = p.id JOIN `order` o ON o.id = op.order_id AND o.payment_status = 1 AND (o.confirm_date  >= ? AND o.confirm_date < ?) GROUP BY p.id ORDER BY amount DESC LIMIT 0, 1",
+                    "SELECT p.id FROM product p JOIN `order_product` op ON op.product_id = p.id JOIN `order` o ON o.id = op.order_id AND o.payment_status = 1 AND (o.confirm_date  >= ? AND o.confirm_date < ?) GROUP BY p.id, op.amount ORDER BY op.amount DESC LIMIT 0, 1",
                     new Object[] { start, end }, Long.class);
             return productId;
         } catch (Exception ex) {
